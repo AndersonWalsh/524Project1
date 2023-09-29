@@ -106,8 +106,9 @@
 
 # Availability:
 - Anderson: class during Tuesday/Thursday 10AM-2PM
-- Alex: * Available after 11:30 Monday, Friday
-        * Available after 2:30 Tuesday
-        * Available between 11:30 - 1:30 Wednesday
-        * Available between 2:30-5 Thursday
+- Alex:
+    * Available after 11:30 Monday, Friday
+    * Available after 2:30 Tuesday
+    * Available between 11:30 - 1:30 Wednesday
+    * Available between 2:30-5 Thursday
 - Bryson: Available after 10 on MW, after 11:30 on F, and before 3 on TR.
