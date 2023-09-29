@@ -106,3 +106,7 @@
 
 # Availability:
 - Anderson: class during Tuesday/Thursday 10AM-2PM
+- Alex: busy Monday,Friday 10-11:30
+        busy Tuesday 9-3
+        busy Wednesday 10-11:30, 1:30pm-end of the day
+        busy Thursday 9-2:30, 5pm-end of the day
