@@ -106,3 +106,4 @@
 
 # Availability:
 - Anderson: class during Tuesday/Thursday 10AM-2PM
+- Bryson: Available after 10 on MW, after 11:30 on F, and before 3 on TR.
