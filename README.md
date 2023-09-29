@@ -2,6 +2,9 @@
 
 ## Limitations
 - RegEx, Python 3.10 libraries only
+- Tokenization, Preprocessing, Pipeline
+    * Don't do things every time to everything
+- Can use pickle files
 
 ## Generalized input processing
 * assignment specification reflects format of
@@ -86,3 +89,20 @@
 ## Investigator
 - Proper noun proximity
     * noun form of crime
+
+### Concurrence of above
+- Greatest proximity of proper nouns for investigator + perpetrator
+
+# Big idea: analyze novels author-specific, create list of keywords pertaining to above novel aspects
+- In spirit of assignment to limit keyword usage somewhat
+    * Otherwise, could ostensibly make a hashmap of each novel's characters and their roles
+- Keep generalizable to detective novels on the whole to the greatest extent
+
+# Roles:
+- Anderson: Input Processing
+- Ani: Output Processing
+- Data Representation: Alex and Bryson
+- Data Extraction: Alex and Bryson
+
+# Availability:
+- Anderson: class during Tuesday/Thursday 10AM-2PM
