@@ -117,7 +117,7 @@
 
 It's easier for me to give  my available timings, and here they are.
 
-* Monday (10/2): 9am-10:30am & 2:30pm-5:30pm
+* Monday (10/2): 9am-10:30am & 3:00pm-5:30pm
 * Tuesday (10/3): 2:30pm-7:30pm
 * Wednesday (10/4): 9am-10:30am & 4pm - 7:30pm
 * Thursday (10/5): 2:30pm-7:30pm
