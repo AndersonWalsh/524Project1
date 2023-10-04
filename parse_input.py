@@ -3,6 +3,7 @@ Module for processing input
     - Can be run directly for testing
 From line of text at command prompt, produces int indicating prompt 1-6
     - Integers correspond to assignment questions
+COULD IMPLEMENT LEMMATIZATION
 '''
 
 
@@ -44,7 +45,7 @@ det_funcs = [detInvest, detCrime, detPerp, detAdj, detConc, detSus] #no detName 
 
 def extractPrompt(line, funcs=det_funcs):
     promptList = []
-
+    line = line.lower()
     #assumes default order of det_funcs
     for i, func in enumerate(funcs):
         novelTxt = [x for x in func(line) if(x != '')]
