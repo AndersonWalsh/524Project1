@@ -75,21 +75,74 @@ sentenceNumber =0
 for element in bookText :
     if element == "." or element == "?" or element == '!':
         sentenceNumber+=1
-print (sentenceNumber)
+# print (sentenceNumber)
 
+
+chapterKeywords = ['chapter i', 'chapter ii', 'chapter iii', 'chapter iv','chapter v','chapter vi','chapter vii', 'chapter viii', 
+                   'chapter ix', 'chapter x', 'chapter xi', 'chapter xii', 'chapter xiii']
+chaptersPattern = '|'.join(map(re.escape, chapterKeywords))
+chapters = re.split(chaptersPattern, bookText)
+print ()
+ChapterText__TheSignOfTheFour = []
+for i in range (13,len(chapters)): # I know how many chapters there are
+    ChapterText__TheSignOfTheFour.append(chapters[i])
 
 separators = ['.', '?', '!']
 pattern = '|'.join(map(re.escape, separators))
-sentences = re.split(pattern, bookText)
-print(len(sentences))
-# for i in range (0,40):
-#     print (result[i])
 
-investigatorSentences = []
-for investigator in identities.Investigators__SignOfTheFour:
-    for i in range (0, len(sentences)):
-        if (investigator in sentences[i]):
-            investigatorSentences.append(sentences[i])
-            #print (sentences[i])
+sentencesText__TheSignOfTheFour = []
+for chapterNumber in range (0,len(ChapterText__TheSignOfTheFour)):
+    sentencesText__TheSignOfTheFour.append (re.split(pattern, ChapterText__TheSignOfTheFour[chapterNumber]))
+#print(len(sentencesText__TheSignOfTheFour))
+#print (sentencesText__TheSignOfTheFour[0])
 
-print(len(investigatorSentences))
+def InvestigatorOccurencesInText (identitiesOfInvestigators, sentences): # pass an idendtities list
+    investigatorSentences = []
+    for investigator in identitiesOfInvestigators:
+        for chapterIndex in range (0,len(sentences)):
+                
+            for i in range (0, len(sentences[chapterIndex])):
+                if (investigator in sentences[chapterIndex][i]):
+                    investigatorSentences.append((i, sentences[chapterIndex][i]))
+                    print ("character ", investigator, " occured in chapter ", chapterIndex+1, " in sentence number " , i+1)
+                    #print (sentences[i])
+    return investigatorSentences
+
+S = InvestigatorOccurencesInText(identities.Investigators__SignOfTheFour, sentencesText__TheSignOfTheFour)
+
+
+
+
+'''
+Chapters from The Murder on the Links
+1	A Fellow Traveller
+2	An Appeal for Help
+3	At the Villa Geneviève
+4	The Letter Signed “Bella”
+5	Mrs. Renauld’s Story
+6	The Scene of the Crime
+7	The Mysterious Madame Daubreuil
+8	An Unexpected Meeting
+9	M. Giraud Finds Some Clues
+10	Gabriel Stonor
+11	Jack Renauld
+12	Poirot Elucidates Certain Points
+13	The Girl with the Anxious Eyes
+14	The Second Body
+15	A Photograph
+16	The Beroldy Case
+17	We Make Further Investigations
+18	Giraud Acts
+19	I Use My Grey Cells
+20	An Amazing Statement
+21	Hercule Poirot on the Case!
+22	I Find Love
+23	Difficulties Ahead
+24	“Save Him!”
+25	An Unexpected Dénouement
+26	I Receive a Letter
+27	Jack Renauld’s Story
+28	Journey’s End
+'''
+chapterBreakdown = []
+

@@ -28,7 +28,7 @@ Criminal: Tonga (murder), Small (prison escape, conspiracy?), Sholto (theft)
 Suspects: Arthur Morstan, Jonathan Small, Thaddeus
 '''
 
-Investigators__SignOfTheFour = ['holmes', 'watson', 'sherlock', 'sherlock homes', 'john watson']
+Investigators__SignOfTheFour = ['holmes', 'watson', 'sherlock', 'sherlock holmes', 'john watson']
 Criminal__SignOfTheFour = ['tonga', 'small', 'sholto']
 Suspects__SignOfTheFour = ['arthur morstan', 'morstan', 'arthur'
                            'jonathan small', 'small', 'jonathan'
