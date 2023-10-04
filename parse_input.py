@@ -3,7 +3,6 @@ Module for processing input
     - Can be run directly for testing
 From line of text at command prompt, produces int indicating prompt 1-6
     - Integers correspond to assignment questions
-COULD IMPLEMENT LEMMATIZATION
 '''
 
 
@@ -19,6 +18,32 @@ prompts = {
     "suspects": 6
 }
 
+'''
+The Murder on the Links:
+Crime: murder (victim Paul Renauld)
+    - stabbing
+    - knife
+Investigator: Giraud and Hercule Poirot (possibly Hastings)
+Criminal: Marthe Daubreuil
+Suspects: Jack, Bella Duveen
+
+The Sign of the Four:
+Crime: theft, murder (bit unclear, it's a Holmes novel)
+    - Multiple victims arguably, Bartholomew of murder, Sholto death by shock
+    - One indirect "murder", another more active murder
+    - A lot of nuance 
+Investigator: Holmes, Watson
+Criminal: Tonga (murder), Small (prison escape, conspiracy?), Sholto (theft)
+Suspects: Arthur Morstan, Jonathan Small, Thaddeus
+
+The Mysterious Affair at Styles
+Crime: Murder (victim Emily Inglethorp)
+    - Poisoning (strychnine)
+Investigator: Arthur Hastings, Hercule Poirot
+Criminal: Alfred Inglethorp (accomplice Evelyn Howard)
+Suspects: Alfred Inglethorp, Evelyn Howard, Cynthia Murdoch, Mary Cavendish, Lawrence Cavendish, John Cavendish
+'''
+
 #possible use for general identification of prompt
 def detName(line):
     return re.findall('(([A-Z]([a-z]+|\.+))+(\s[A-Z][a-z]+)+)|([A-Z]{2,})|([a-z][A-Z])[a-z]*[A-Z][a-z]*', line)
@@ -27,7 +52,7 @@ def detInvest(line):
     return re.findall('|invest|detect|protag|main', line)
 
 def detCrime(line):
-    return re.findall('crime|thef|murder|steal|kill', line)
+    return re.findall('crime|thef|murder|steal|stole|kill', line)
 
 def detPerp(line):
     return re.findall('crim|perp|murderer|thie|bad|evil', line)
