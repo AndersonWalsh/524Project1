@@ -98,6 +98,32 @@
     * Otherwise, could ostensibly make a hashmap of each novel's characters and their roles
 - Keep generalizable to detective novels on the whole to the greatest extent
 
+# Metadata for Novels
+
+## The Murder on the Links:
+Crime: murder (victim Paul Renauld)
+    - stabbing
+    - knife
+Investigator: Giraud and Hercule Poirot (possibly Hastings)
+Criminal: Marthe Daubreuil
+Suspects: Jack, Bella Duveen
+
+## The Sign of the Four:
+Crime: theft, murder (bit unclear, it's a Holmes novel)
+    - Multiple victims arguably, Bartholomew of murder, Sholto death by shock
+    - One indirect "murder", another more active murder
+    - A lot of nuance 
+Investigator: Holmes, Watson
+Criminal: Tonga (murder), Small (prison escape, conspiracy?), Sholto (theft)
+Suspects: Arthur Morstan, Jonathan Small, Thaddeus
+
+## The Mysterious Affair at Styles
+Crime: Murder (victim Emily Inglethorp)
+    - Poisoning (strychnine)
+Investigator: Arthur Hastings, Hercule Poirot
+Criminal: Alfred Inglethorp (accomplice Evelyn Howard)
+Suspects: Alfred Inglethorp, Evelyn Howard, Cynthia Murdoch, Mary Cavendish, Lawrence Cavendish, John Cavendish
+
 # Roles:
 - Anderson: Input Processing
 - Ani: Output Processing
