@@ -56,8 +56,7 @@ def extractPrompt(line, funcs=det_funcs):
     #reprompt if nothing detected
     if(promptList == []):
         print("I'm sorry, can you rephrase your question?")
-        extractPrompt(input())
-        return
+        return extractPrompt(input())
     
     #if base case isn't true, one of these has to be
     #goes in order of most specific to least specific prompt
