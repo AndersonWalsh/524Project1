@@ -49,13 +49,13 @@ def detName(line):
     return re.findall('(([A-Z]([a-z]+|\.+))+(\s[A-Z][a-z]+)+)|([A-Z]{2,})|([a-z][A-Z])[a-z]*[A-Z][a-z]*', line)
 
 def detInvest(line):
-    return re.findall('|invest|detect|protag|main', line)
+    return re.findall('|invest|detect|protag|main|hercule|poirot|arthur|hastings|giraud|sherlock|holmes|john|watson', line)
 
 def detCrime(line):
-    return re.findall('crime|thef|murder|steal|stole|kill', line)
+    return re.findall('crime|thef|murder|steal|stole|kill|stab|thiev|kni|theft|murder|prison|escape|conspiracy|shock|poison|stryc', line)
 
 def detPerp(line):
-    return re.findall('crim|perp|murderer|thie|bad|evil', line)
+    return re.findall('crim|perp|murderer|thie|bad|evil|marthe|daubreuil|tonga|small|sholto|alf|inglethorp', line)
 
 def detAdj(line):
     return re.findall('adjac|around|near|close|next|', line)
@@ -64,7 +64,7 @@ def detConc(line):
     return re.findall('meet|concur|clash|fight|talk|speak|capture|detain|arrest|apprehend', line)
 
 def detSus(line):
-    return re.findall('possible|inter|susp|potent', line)
+    return re.findall('poss|inter|susp|potent|jack|bella|duveen|arthur|morstan|small|jonathan|john|thaddeus|evelyn|howard|cynthia|murdoch|mary|cavendish|lawrence', line)
 
 det_funcs = [detInvest, detCrime, detPerp, detAdj, detConc, detSus] #no detName yet
 
