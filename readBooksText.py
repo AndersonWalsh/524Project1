@@ -69,23 +69,36 @@ for i in range (allbooks):
 # Other two books have the same format for the chaptes
 
 with open ("TheSignOfTheFourCLEANED.txt", 'r') as file:
-    bookText = file.read()
+    FullText__TheSignOfTheFour = file.read()
 
-sentenceNumber =0
-for element in bookText :
-    if element == "." or element == "?" or element == '!':
-        sentenceNumber+=1
+with open ("TheMurderOnTheLinksCLEANED.txt", 'r') as file:
+    FullText__TheMurderOnTheLinks = file.read()
+
+with open ("TheMysteriousAffairAtStylesCLEANED.txt", 'r') as file:
+    FullText__TheMysteriousAffairAtStyles = file.read()
+
+# sentenceNumber =0
+# for element in FullText__TheSignOfTheFour :
+#     if element == "." or element == "?" or element == '!':
+#         sentenceNumber+=1
 # print (sentenceNumber)
 
 
 chapterKeywords = ['chapter i', 'chapter ii', 'chapter iii', 'chapter iv','chapter v','chapter vi','chapter vii', 'chapter viii', 
                    'chapter ix', 'chapter x', 'chapter xi', 'chapter xii', 'chapter xiii']
 chaptersPattern = '|'.join(map(re.escape, chapterKeywords))
-chapters = re.split(chaptersPattern, bookText)
-print ()
+
+
+chapters__TheSignOfTheFour = re.split(chaptersPattern, FullText__TheSignOfTheFour)
 ChapterText__TheSignOfTheFour = []
-for i in range (13,len(chapters)): # I know how many chapters there are
-    ChapterText__TheSignOfTheFour.append(chapters[i])
+for i in range (13,len(chapters__TheSignOfTheFour)): # I know how many chapters there are
+    ChapterText__TheSignOfTheFour.append(chapters__TheSignOfTheFour[i])
+
+chapters__MysteriousAffair = re.split(chaptersPattern, FullText__TheMysteriousAffairAtStyles)
+ChapterText__MysteriousAffair = []
+for i in range (13,len(chapters__MysteriousAffair)): # I know how many chapters there are
+    ChapterText__MysteriousAffair.append(chapters__MysteriousAffair[i])
+
 
 separators = ['.', '?', '!']
 pattern = '|'.join(map(re.escape, separators))
@@ -93,23 +106,30 @@ pattern = '|'.join(map(re.escape, separators))
 sentencesText__TheSignOfTheFour = []
 for chapterNumber in range (0,len(ChapterText__TheSignOfTheFour)):
     sentencesText__TheSignOfTheFour.append (re.split(pattern, ChapterText__TheSignOfTheFour[chapterNumber]))
-#print(len(sentencesText__TheSignOfTheFour))
-#print (sentencesText__TheSignOfTheFour[0])
 
-def InvestigatorOccurencesInText (identitiesOfInvestigators, sentences): # pass an idendtities list
-    investigatorSentences = []
-    for investigator in identitiesOfInvestigators:
+sentencesText__MysteriousAffair = []
+for chapterNumber in range (0,len(ChapterText__MysteriousAffair)):
+    sentencesText__MysteriousAffair.append (re.split(pattern, ChapterText__MysteriousAffair[chapterNumber]))
+
+
+
+
+
+def Identities__FindOccurencesInText (identitiesList, sentences): # pass an idendtities list
+    RelevantSentencesData = []
+    for identity in identitiesList:
         for chapterIndex in range (0,len(sentences)):
-                
-            for i in range (0, len(sentences[chapterIndex])):
-                if (investigator in sentences[chapterIndex][i]):
-                    investigatorSentences.append((i, sentences[chapterIndex][i]))
-                    print ("character ", investigator, " occured in chapter ", chapterIndex+1, " in sentence number " , i+1)
-                    #print (sentences[i])
-    return investigatorSentences
+            for sentenceIndex in range (0, len(sentences[chapterIndex])):
+                if (identity in sentences[chapterIndex][sentenceIndex]):
+                    RelevantSentencesData.append ((identity, chapterIndex+1, sentenceIndex+1 ))
+                    #print ("character ", identity, " occured in chapter ", chapterIndex+1, " in sentence number " , sentenceIndex+1)
+    return RelevantSentencesData
 
-S = InvestigatorOccurencesInText(identities.Investigators__SignOfTheFour, sentencesText__TheSignOfTheFour)
-
+InvestigatorSentencesData__TheSignOfTheFour = Identities__FindOccurencesInText(identities.Investigators__SignOfTheFour, sentencesText__TheSignOfTheFour)
+InvestigatorSentencesData__MysteriousAffair = Identities__FindOccurencesInText(identities.Investigators__MysteriousAffair, sentencesText__MysteriousAffair)
+print (InvestigatorSentencesData__TheSignOfTheFour)
+print()
+print (InvestigatorSentencesData__MysteriousAffair)
 
 
 
