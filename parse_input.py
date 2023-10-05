@@ -49,22 +49,22 @@ def detName(line):
     return re.findall('(([A-Z]([a-z]+|\.+))+(\s[A-Z][a-z]+)+)|([A-Z]{2,})|([a-z][A-Z])[a-z]*[A-Z][a-z]*', line)
 
 def detInvest(line):
-    return re.findall('invest|detect|protag|main|hercule|poirot|arthur|hastings|giraud|sherlock|holmes|john|watson', line)
+    return re.findall('invest|detect|protag|main|hercule|poirot|arthur|hastings|giraud|sherlock|holmes|john|watson|inform|sleuth|officer|agent|inspect|police', line)
 
 def detCrime(line):
-    return re.findall('crime|thef|murder|steal|stole|kill|stab|thiev|kni|theft|murder|prison|escape|conspir|shock|poison|stryc', line)
+    return re.findall('crime|thef|murder|steal|stole|kill|stab|thiev|kni|theft|murder|prison|escape|conspir|shock|poison|stryc|felony|scandal|wrong|lawless|misdeed|assass|homici|shoot|slay|burgli|burgle', line)
 
 def detPerp(line):
-    return re.findall('commit|crimin|perp|murderer|killer|thief|bad|evil|marthe|daubreuil|tonga|small|sholto|alf|inglethorp', line)
+    return re.findall('commit|crimin|perp|murderer|killer|thief|bad|evil|marthe|daubreuil|tonga|small|sholto|alf|inglethorp|felon|crook|robber|burglar', line)
 
 def detAdj(line):
-    return re.findall('adjac|around|near|close|next|', line)
+    return re.findall('adjac|around|near|close|next|border|neigh', line)
 
 def detConc(line):
-    return re.findall('meet|concur|clash|fight|talk|speak|capture|detain|arrest|apprehend|convers', line)
+    return re.findall('meet|concur|clash|fight|talk|speak|capture|detain|arrest|apprehend|convers|contact|face|see|altercat|conflict|brawl|exchang|skirmi|scuffl|chat|exchang|imprison|jail|incarcer|interrogat', line)
 
 def detSus(line):
-    return re.findall('poss|inter|susp|potent|jack|bella|duveen|morstan|small|jonathan|john|thaddeus|evelyn|howard|cynthia|murdoch|mary|cavendish|lawrence', line)
+    return re.findall('poss|inter|susp|potent|jack|bella|duveen|morstan|small|jonathan|john|thaddeus|evelyn|howard|cynthia|murdoch|mary|cavendish|lawrence|conceiv|feas|plaus|proba|viabl|likel', line)
 
 det_funcs = [detInvest, detCrime, detPerp, detAdj, detConc, detSus] #no detName yet
 
