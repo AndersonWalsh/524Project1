@@ -104,6 +104,7 @@ def extractPrompt(line, funcs=det_funcs):
     #catch possible intersecting queries
     global doubleQuery
     if(doubleQuery):
+        print("debugging message: double query case triggered, previous prompt ignored to handle for potential dual crime + criminal prompt")
         secQuery = doubleQuery
         doubleQuery = False
         return secQuery
