@@ -147,3 +147,39 @@
 	* Wednesday (10/4): 9am-10:30am & 4pm - 7:30pm
 	* Thursday (10/5): 2:30pm-7:30pm
 	* Friday (10/6): 10am - 7:30pm
+
+# 10/6/23 Meeting 2 Notes
+
+## Agenda
+- Standup for individual progress so far
+- Work moving forward for each project component
+- Timeline
+### Discussion
+- Have preprocessing done, data structure of lists, per book, indexed by book chapter, each index has text of book
+    * sentence list has indexes that are also chapters, but each index is a nested list containing each sentence as a separate string
+- 6 functions to answer questions
+- preprocess text on boot
+- answer questions per prompt
+- high level structure being implemented by Bryson, OOP
+- Input processing implemented at baseline
+- Answer extraction
+    * Chapter and sentence # derived from data structures by linear search: questions 1, 3, 6
+### Next Steps
+- Input processing just needs QA testing
+- For data preprocessing, implement paragraph separation (stretch goal)
+- Answer extraction WIP
+    * Andy: question 5 concurrence case
+        * How many words within anchor does perpetrator occur, look within certain num words, or paragraph representation
+        * Capture shared sentences as a baseline, action verbs
+    * Bryson: Prompt 2, code structuring, and main() code
+        * Crime type, method, victim, possibly setting (person, place, thing)
+    * Alex: Finish prompts 1, 3, and 6; prompt 4
+- Ani is going to define an interface he anticipates for output, based on that interface create output
+    * Data team will use that model once completed
+- Next meeting: Wednesday, 1PM
+    * Code done, fully functional Friday
+    * Presentation done over the weekend
+        * 10 minute script
+        * Presentation slides
+        * 2 page report
+- Last meeting: Sunday, time TBD
