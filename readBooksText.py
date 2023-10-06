@@ -8,85 +8,13 @@ import csv
 from collections import Counter
 import identities
 
-def CheckFileExists (filename):
-    return (os.path.exists(filename))
 
+# Murder of the links uses numeric chapter numbers with chapter names
+# Other two books have the same format for the chapters (Roman numerals)
+CHAPTER_KEYWORDS = ('chapter i\W', 'chapter ii\W', 'chapter iii\W', 'chapter iv\W','chapter v\W','chapter vi\W','chapter vii\W', 'chapter viii\W', 
+                   'chapter ix\W', 'chapter x\W', 'chapter xi\W', 'chapter xii\W', 'chapter xiii\W')
 
-BookList = []
-WebsiteList = []
-wordCountDictionary_List = []
-wordCountUniqueDictionary_List = []
-
-with open("./sitesToScrap.csv", newline='') as csvfile:
-    linkReader = csv.reader(csvfile)
-    for line in linkReader:
-        website = line[0]
-        bookName = line[1]
-        BookList.append(bookName)
-        WebsiteList.append(website)
-
-
-#retreive words from all books
-allbooks = len(WebsiteList)
-RegenerateOption = False
-for i in range (allbooks):
-    cleanedBook = str(BookList[i]) + "CLEANED.txt"
-    if (CheckFileExists(cleanedBook) == False or (RegenerateOption == True)):
-        file = open (str(cleanedBook), 'w')
-        #print ("file does not exist | regeneration requested -> clean the text and create a new file")
-        print ("Processing book text for "+ str(BookList[i]))
-
-        r = requests.get(WebsiteList[i])
-        soup = BeautifulSoup(r.text, 'html.parser')
-        textExtracted = soup.get_text().lower()
-
-        #start to end headers cleanup
-        list_begin = textExtracted.split(str("*** START OF THE PROJECT GUTENBERG EBOOK ").lower())
-        if (len(list_begin)>1):
-            begin_book_text = list_begin[1].split(" ***\n")
-            textExtracted = begin_book_text[1].split("*** end")
-            textExtracted = textExtracted[0]
-
-        textExtracted = textExtracted.replace("—"," ")
-
-        wordsInBook = re.split("\s+", textExtracted)#long dash taken care of
-
-        for j in range (len(wordsInBook)):
-            wordsInBook[j] = re.sub('[][,"&|:@,<>()*$\\/;=”“‘]', "", wordsInBook[j])# REMOVED . AND ! AND ? TO SEPARATE INTO SENTENCES
-            wordsInBook[j] = re.sub('^[0-9\.]*$', "", wordsInBook[j])
-
-            file.write (str(wordsInBook[j]) + " ")
-        file.close()
-
-    else:
-        print ("file exists: ", cleanedBook," ->  (warning)API call was not made. Check the directory for the cleaned text. Change RegenerateOption parameter's value to True if you want to make the call\n")
-        continue
-
-
-
-#NOTES:
-#Murder of the links uses numeric chapter numbers without chapter keyword. Need to be separated.
-# Other two books have the same format for the chaptes
-
-with open ("TheSignOfTheFourCLEANED.txt", 'r') as file:
-    FullText__TheSignOfTheFour = file.read()
-
-with open ("TheMurderOnTheLinksCLEANED.txt", 'r') as file:
-    FullText__TheMurderOnTheLinks = file.read()
-
-with open ("TheMysteriousAffairAtStylesCLEANED.txt", 'r') as file:
-    FullText__TheMysteriousAffairAtStyles = file.read()
-
-# sentenceNumber =0
-# for element in FullText__TheSignOfTheFour :
-#     if element == "." or element == "?" or element == '!':
-#         sentenceNumber+=1
-# print (sentenceNumber)
-
-
-chapterKeywords = ['chapter i\W', 'chapter ii\W', 'chapter iii\W', 'chapter iv\W','chapter v\W','chapter vi\W','chapter vii\W', 'chapter viii\W', 
-                   'chapter ix\W', 'chapter x\W', 'chapter xi\W', 'chapter xii\W', 'chapter xiii\W']
-chapterKeywords__TheMurderOnTheLinks = [
+CHAPTER_KEYWORDS_THE_MURDER_ON_THE_LINKS = (
 '1\W*.\W*.ellow\W*.raveller',
 '2\W*.n\W*.ppeal\W*.or\W*.elp',
 '3\W*.t\W*.he\W*.illa\W*.enevi..ve',
@@ -114,93 +42,215 @@ chapterKeywords__TheMurderOnTheLinks = [
 '25\W*.n\W*.nexpected\W*...nouement',
 '26\W*.\W*.eceive\W*.\W*.etter',
 '27\W*.ack\W*.enauld.s\W*.tory',
-'28\W*.ourney.s\W*.nd']
-chaptersPattern = '|'.join(chapterKeywords)
-chaptersPattern__TheMurderOnTheLinks = '|'.join(chapterKeywords__TheMurderOnTheLinks)
+'28\W*.ourney.s\W*.nd')
 
 
-chapters__TheSignOfTheFour = re.split(chaptersPattern, FullText__TheSignOfTheFour)
-ChapterText__TheSignOfTheFour = []
-for i in range (13,len(chapters__TheSignOfTheFour)): # I know how many chapters there are
-    ChapterText__TheSignOfTheFour.append(chapters__TheSignOfTheFour[i])
-
-chapters__MysteriousAffair = re.split(chaptersPattern, FullText__TheMysteriousAffairAtStyles)
-ChapterText__MysteriousAffair = []
-for i in range (14,len(chapters__MysteriousAffair)): # I know how many chapters there are
-    ChapterText__MysteriousAffair.append(chapters__MysteriousAffair[i])
-
-chapters__TheMurderOnTheLinks = re.split(chaptersPattern__TheMurderOnTheLinks, FullText__TheMurderOnTheLinks)
-ChapterText__TheMurderOnTheLinks = []
-for i in range (1,len(chapters__TheMurderOnTheLinks)): # I know how many chapters there are
-    ChapterText__TheMurderOnTheLinks.append(chapters__TheMurderOnTheLinks[i])
-
-
-separators = ['.', '?', '!']
-pattern = '|'.join(map(re.escape, separators))
-
-sentencesText__TheSignOfTheFour = []
-for chapterNumber in range (0,len(ChapterText__TheSignOfTheFour)):
-    sentencesText__TheSignOfTheFour.append (re.split(pattern, ChapterText__TheSignOfTheFour[chapterNumber]))
-
-sentencesText__MysteriousAffair = []
-for chapterNumber in range (0,len(ChapterText__MysteriousAffair)):
-    sentencesText__MysteriousAffair.append (re.split(pattern, ChapterText__MysteriousAffair[chapterNumber]))
-
-sentencesText__TheMurderOnTheLinks = []
-for chapterNumber in range (0,len(ChapterText__TheMurderOnTheLinks)):
-    sentencesText__TheMurderOnTheLinks.append (re.split(pattern, ChapterText__TheMurderOnTheLinks[chapterNumber]))
-
-
-
+def CheckFileExists (filename):
+    return (os.path.exists(filename))
 
 def Identities__FindOccurencesInText (identitiesList, sentences): # pass an idendtities list
-    RelevantSentencesData = []
-    for identity in identitiesList:
-        for chapterIndex in range (0,len(sentences)):
-            for sentenceIndex in range (0, len(sentences[chapterIndex])):
-                if (identity in sentences[chapterIndex][sentenceIndex]):
-                    RelevantSentencesData.append ((identity, chapterIndex+1, sentenceIndex+1 ))
-                    #print ("character ", identity, " occured in chapter ", chapterIndex+1, " in sentence number " , sentenceIndex+1)
-    return RelevantSentencesData
-
-InvestigatorSentencesData__TheSignOfTheFour = Identities__FindOccurencesInText(identities.Investigators__SignOfTheFour, sentencesText__TheSignOfTheFour)
-InvestigatorSentencesData__MysteriousAffair = Identities__FindOccurencesInText(identities.Investigators__MysteriousAffair, sentencesText__MysteriousAffair)
-# print (InvestigatorSentencesData__TheSignOfTheFour)
-# print()
-# print (InvestigatorSentencesData__MysteriousAffair)
+        RelevantSentencesData = []
+        for identity in identitiesList:
+            for chapterIndex in range (0,len(sentences)):
+                for sentenceIndex in range (0, len(sentences[chapterIndex])):
+                    if (identity in sentences[chapterIndex][sentenceIndex]):
+                        RelevantSentencesData.append ((identity, chapterIndex+1, sentenceIndex+1 ))
+                        #print ("character ", identity, " occured in chapter ", chapterIndex+1, " in sentence number " , sentenceIndex+1)
+        return RelevantSentencesData
 
 
+class NovelProcessing:
+    def __init__(self):
 
-'''
-Chapters from The Murder on the Links
-1	A Fellow Traveller
-2	An Appeal for Help
-3	At the Villa Geneviève
-4	The Letter Signed “Bella”
-5	Mrs. Renauld’s Story
-6	The Scene of the Crime
-7	The Mysterious Madame Daubreuil
-8	An Unexpected Meeting
-9	M. Giraud Finds Some Clues
-10	Gabriel Stonor
-11	Jack Renauld
-12	Poirot Elucidates Certain Points
-13	The Girl with the Anxious Eyes
-14	The Second Body
-15	A Photograph
-16	The Beroldy Case
-17	We Make Further Investigations
-18	Giraud Acts
-19	I Use My Grey Cells
-20	An Amazing Statement
-21	Hercule Poirot on the Case!
-22	I Find Love
-23	Difficulties Ahead
-24	“Save Him!”
-25	An Unexpected Dénouement
-26	I Receive a Letter
-27	Jack Renauld’s Story
-28	Journey’s End
-'''
-chapterBreakdown = []
+        # Init novel full text as empty strs
+        self.FullText__MysteriousAffair = ''
+        self.FullText__TheSignOfTheFour = ''
+        self.FullText__TheMurderOnTheLinks = ''
 
+        # Init list of novel chapters as empty lists
+        self.ChapterText__MysteriousAffair = []
+        self.ChapterText__TheSignOfTheFour = []
+        self.ChapterText__TheMurderOnTheLinks = []
+
+        # Init list of novel chapters, whose each value will hold a list of the sentences in the given chapter index, as empty lists
+        self.SentencesText__MysteriousAffair = []
+        self.SentencesText__TheSignOfTheFour = []
+        self.SentencesText__TheMurderOnTheLinks = []
+
+
+    # Make Project Gutenberg requests to get novel text and (re)generate novel clean text files
+    def redownloadRegenerateCleanedTextFiles(self):
+        BookList = []
+        WebsiteList = []
+
+        with open("./sitesToScrap.csv", newline='') as csvfile:
+            linkReader = csv.reader(csvfile)
+            for line in linkReader:
+                website = line[0]
+                bookName = line[1]
+                BookList.append(bookName)
+                WebsiteList.append(website)
+
+        #retreive words from all books
+        allbooks = len(WebsiteList)
+        for i in range (allbooks):
+            cleanedBook = str(BookList[i]) + "CLEANED.txt"
+            file = open (str(cleanedBook), 'w')
+            #print ("file does not exist | regeneration requested -> clean the text and create a new file")
+            print ("Processing book text for "+ str(BookList[i]))
+
+            r = requests.get(WebsiteList[i])
+            soup = BeautifulSoup(r.text, 'html.parser')
+            textExtracted = soup.get_text().lower()
+
+            #start to end headers cleanup
+            list_begin = textExtracted.split(str("*** START OF THE PROJECT GUTENBERG EBOOK ").lower())
+            if (len(list_begin)>1):
+                begin_book_text = list_begin[1].split(" ***\n")
+                textExtracted = begin_book_text[1].split("*** end")
+                textExtracted = textExtracted[0]
+
+            textExtracted = textExtracted.replace("—"," ")
+
+            wordsInBook = re.split("\s+", textExtracted)#long dash taken care of
+
+            for j in range (len(wordsInBook)):
+                wordsInBook[j] = re.sub('[][,"&|:@,<>()*$\\/;=”“‘]', "", wordsInBook[j])# REMOVED . AND ! AND ? TO SEPARATE INTO SENTENCES
+                wordsInBook[j] = re.sub('^[0-9\.]*$', "", wordsInBook[j])
+
+                file.write (str(wordsInBook[j]) + " ")
+            file.close()
+
+
+    # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), return its full text as a single string
+    def getFullText(self, novelId):
+        
+        if(novelId == 0):
+            if(self.FullText__MysteriousAffair == ''):
+
+                if(not CheckFileExists('TheMysteriousAffairAtStylesCLEANED.txt')):
+                    self.redownloadRegenerateCleanedTextFiles()
+
+                with open ("TheMysteriousAffairAtStylesCLEANED.txt", 'r') as file:
+                    self.FullText__MysteriousAffair = file.read()
+            
+            return self.FullText__MysteriousAffair
+        
+        elif(novelId == 1):
+            if(self.FullText__TheSignOfTheFour == ''):
+
+                if(not CheckFileExists('TheSignOfTheFourCLEANED.txt')):
+                    self.redownloadRegenerateCleanedTextFiles()
+
+                with open ("TheSignOfTheFourCLEANED.txt", 'r') as file:
+                    self.FullText__TheSignOfTheFour = file.read()
+            
+            return self.FullText__TheSignOfTheFour
+        
+        elif(novelId == 2):
+            if(self.FullText__TheMurderOnTheLinks == ''):
+
+                if(not CheckFileExists('TheMurderOnTheLinksCLEANED.txt')):
+                    self.redownloadRegenerateCleanedTextFiles()
+
+                with open ("TheMurderOnTheLinksCLEANED.txt", 'r') as file:
+                    self.FullText__TheMurderOnTheLinks = file.read()
+            
+            return self.FullText__TheMurderOnTheLinks
+        
+        return None
+
+
+    # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), return ALL of its chapters as a list of strings (each string is the text for a full chapter)
+    def getChaptersText(self, novelId):
+
+        if(novelId == 0 and self.ChapterText__MysteriousAffair):
+            return self.ChapterText__MysteriousAffair
+        elif(novelId == 1 and self.ChapterText__TheSignOfTheFour):
+            return self.ChapterText__TheSignOfTheFour
+        elif(novelId == 2 and self.ChapterText__TheMurderOnTheLinks):
+            return self.ChapterText__TheMurderOnTheLinks
+
+        if(novelId == 0 or novelId == 1):
+            chaptersPattern = '|'.join(CHAPTER_KEYWORDS)
+        elif(novelId == 2):
+            chaptersPattern = '|'.join(CHAPTER_KEYWORDS_THE_MURDER_ON_THE_LINKS)
+
+        chapters = re.split(chaptersPattern, self.getFullText(novelId))
+
+        if(novelId == 0):
+            for i in range (14,len(chapters)): # I know how many chapters there are
+                self.ChapterText__MysteriousAffair.append(chapters[i])
+            return self.ChapterText__MysteriousAffair
+        elif(novelId == 1):
+            for i in range (13,len(chapters)): # I know how many chapters there are
+                self.ChapterText__TheSignOfTheFour.append(chapters[i])
+            return self.ChapterText__TheSignOfTheFour
+        elif(novelId == 2):
+            for i in range (1,len(chapters)): # I know how many chapters there are
+                self.ChapterText__TheMurderOnTheLinks.append(chapters[i])
+            return self.ChapterText__TheMurderOnTheLinks
+
+        return None
+    
+
+    # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), return ALL of its sentences as a list of lists of strings (Outside list is keyed on chapter, inside lists are keyed on sentence number relative to the start of the chapter, each value of inside lists is a single sentence)
+    def getSentencesText(self, novelId):
+
+        separators = ['.', '?', '!']
+        pattern = '|'.join(map(re.escape, separators))
+        novelChapters = self.getChaptersText(novelId)
+
+        if(novelId == 0):
+
+            if(not self.SentencesText__MysteriousAffair):
+                for chapterNumber in range (0,len(novelChapters)):
+                    self.SentencesText__MysteriousAffair.append (re.split(pattern, novelChapters[chapterNumber]))
+
+            return self.SentencesText__MysteriousAffair
+        
+        elif(novelId == 1):
+
+            if(not self.SentencesText__TheSignOfTheFour):
+                for chapterNumber in range (0,len(novelChapters)):
+                    self.SentencesText__TheSignOfTheFour.append (re.split(pattern, novelChapters[chapterNumber]))
+
+            return self.SentencesText__TheSignOfTheFour
+        
+        elif(novelId == 2):
+
+            if(not self.SentencesText__TheMurderOnTheLinks):
+                for chapterNumber in range (0,len(novelChapters)):
+                    self.SentencesText__TheMurderOnTheLinks.append (re.split(pattern, novelChapters[chapterNumber]))
+
+            return self.SentencesText__TheMurderOnTheLinks
+        
+        return None
+
+    
+    # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: When does the investigator (or a pair) occur for the first time -  chapter #, the sentence(s) # in a chapter
+    def answer1(self, novelId):
+
+        sentences = self.getSentencesText(novelId)
+
+        if(novelId == 0):
+            InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__MysteriousAffair, sentences)
+        elif(novelId == 1):
+            InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__SignOfTheFour, sentences)
+        elif(novelId == 2):
+            InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__murderOnTheLinks, sentences)
+
+        return None
+
+
+    # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), extract and return an answer to the given question (number corresponds to Canvas assignment)
+    def extractAnswerToQuestion(self, novelId, questionId):
+        
+        if(questionId == 1):
+            return self.answer1(novelId)
+
+        return None
+
+if __name__ == "__main__":
+    proc = NovelProcessing()
+    print(proc.extractAnswerToQuestion(0, 1))

@@ -64,4 +64,4 @@ All_investigators = set (Investigators__murderOnTheLinks + Investigators__SignOf
 All_criminals = set (Criminal__murderOnTheLinks + Criminal__SignOfTheFour + Criminal__MysteriousAffair)
 All_suspects = set (Suspects__murderOnTheLinks + Suspects__SignOfTheFour + Suspects__MysteriousAffair)
 All_crimes = set (Crime__murderOnTheLinks + Crime__SignOfTheFour + Crime__MysteriousAffair)
-print (All_suspects)
+# print (All_suspects)
