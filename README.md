@@ -176,6 +176,7 @@
     * Alex: Finish prompts 1, 3, and 6; prompt 4
 - Ani is going to define an interface he anticipates for output, based on that interface create output
     * Data team will use that model once completed
+### Timeline
 - Next meeting: Wednesday, 1PM
     * Code done, fully functional Friday
     * Presentation done over the weekend
