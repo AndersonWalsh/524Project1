@@ -18,6 +18,12 @@ prompts = {
     "suspects": 6
 }
 
+novels = {
+    "mys_affair": 0,
+    "sign_of": 1,
+    "murder_ol": 2
+}
+
 '''
 The Murder on the Links:
 Crime: murder (victim Paul Renauld)
@@ -149,11 +155,45 @@ def extractPrompt(line, funcs=det_funcs):
         return prompts["investigator"]
     if(prompts["perpetrator"] in promptList):
         return prompts["perpetrator"]
+    
+
+def det_MysAff(line):
+    return re.findall('mysterious|affair', line)
+
+def det_Sof(line):
+    return re.findall('sign|four', line)
+
+def det_Mol(line):
+    return re.findall('links', line)
+
+det_funcs_novel = [det_MysAff, det_Sof, det_Mol]
+
+def extractNovel(line, funcs=det_funcs_novel):
+    novel = getPromptsList([], line, funcs)
+
+    #reprompt if nothing detected
+    if(len(novel) <= 0):
+        print("Sorry, I don't know that one. Are you interested in one of the listed novels?")
+        return extractNovel(input())
+
+    # -1 due to 0 indexing on novels 
+    novel = novel[0] - 1
+    #if something was detected, it has to be one of the novels
+    if(novels["murder_ol"] == novel):
+        return novels["murder_ol"]
+    if(novels["mys_affair"] == novel):
+        return novels["mys_affair"]
+    if(novels["sign_of"] == novel):
+        return novels["sign_of"]
 
 if __name__ == "__main__":
     print("Running for direct prompt detection testing. To quit, type \"exit\"")
-    print(f"\nNumber correspondence to prompts: {prompts}")
+    print(f"\nNumber correspondence to novel prompts: {novels}")
+    print(f"\nNumber correspondence to content prompts: {prompts}")
+    print("\nWhat novel are you interested in?")
+    print(extractNovel(input()))
     while(1):
+        print("What subject are you interested in?")   
         if(doubleQuery):
             print(extractPrompt(line))
         line = input()
