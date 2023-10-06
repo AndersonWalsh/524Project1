@@ -77,6 +77,10 @@ class NovelProcessing:
         self.SentencesText__TheSignOfTheFour = []
         self.SentencesText__TheMurderOnTheLinks = []
 
+        # Sets all object variables above to correct values when object is created
+        for i in range(3):
+            self.getSentencesText(i)
+
 
     # Make Project Gutenberg requests to get novel text and (re)generate novel clean text files
     def redownloadRegenerateCleanedTextFiles(self):
@@ -253,4 +257,4 @@ class NovelProcessing:
 
 if __name__ == "__main__":
     proc = NovelProcessing()
-    print(proc.extractAnswerToQuestion(0, 1))
+    print(proc.SentencesText__MysteriousAffair[0][0])
