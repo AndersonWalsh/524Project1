@@ -84,9 +84,39 @@ with open ("TheMysteriousAffairAtStylesCLEANED.txt", 'r') as file:
 # print (sentenceNumber)
 
 
-chapterKeywords = ['chapter i', 'chapter ii', 'chapter iii', 'chapter iv','chapter v','chapter vi','chapter vii', 'chapter viii', 
-                   'chapter ix', 'chapter x', 'chapter xi', 'chapter xii', 'chapter xiii']
-chaptersPattern = '|'.join(map(re.escape, chapterKeywords))
+chapterKeywords = ['chapter i\W', 'chapter ii\W', 'chapter iii\W', 'chapter iv\W','chapter v\W','chapter vi\W','chapter vii\W', 'chapter viii\W', 
+                   'chapter ix\W', 'chapter x\W', 'chapter xi\W', 'chapter xii\W', 'chapter xiii\W']
+chapterKeywords__TheMurderOnTheLinks = [
+'1\W*.\W*.ellow\W*.raveller',
+'2\W*.n\W*.ppeal\W*.or\W*.elp',
+'3\W*.t\W*.he\W*.illa\W*.enevi..ve',
+'4\W*.he\W*.etter\W*.igned\W*..ella.',
+'5\W*.rs.\W*.enauld.s\W*.tory',
+'6\W*.he\W*.cene\W*.f\W*.he\W*.rime',
+'7\W*.he\W*.ysterious\W*.adame\W*.aubreuil',
+'8\W*.n\W*.nexpected\W*.eeting',
+'9\W*..\W*.iraud\W*.inds\W*.ome\W*.lues',
+'10\W*.abriel\W*.tonor',
+'11\W*.ack\W*.enauld',
+'12\W*.oirot\W*.lucidates\W*.ertain\W*.oints',
+'13\W*.he\W*.irl\W*.ith\W*.he\W*.nxious\W*.yes',
+'14\W*.he\W*.econd\W*.ody',
+'15\W*.\W*.hotograph',
+'16\W*.he\W*.eroldy\W*.ase',
+'17\W*.e\W*.ake\W*.urther\W*.nvestigations',
+'18\W*.iraud\W*.cts',
+'19\W*.\W*.se\W*.y\W*.rey\W*.ells',
+'20\W*.n\W*.mazing\W*.tatement',
+'21\W*.ercule\W*.oirot\W*.n\W*.he\W*.ase!',
+'22\W*.\W*.ind\W*.ove',
+'23\W*.ifficulties\W*.head',
+'24\W*.ave\W*.im!.',
+'25\W*.n\W*.nexpected\W*...nouement',
+'26\W*.\W*.eceive\W*.\W*.etter',
+'27\W*.ack\W*.enauld.s\W*.tory',
+'28\W*.ourney.s\W*.nd']
+chaptersPattern = '|'.join(chapterKeywords)
+chaptersPattern__TheMurderOnTheLinks = '|'.join(chapterKeywords__TheMurderOnTheLinks)
 
 
 chapters__TheSignOfTheFour = re.split(chaptersPattern, FullText__TheSignOfTheFour)
@@ -96,8 +126,13 @@ for i in range (13,len(chapters__TheSignOfTheFour)): # I know how many chapters 
 
 chapters__MysteriousAffair = re.split(chaptersPattern, FullText__TheMysteriousAffairAtStyles)
 ChapterText__MysteriousAffair = []
-for i in range (13,len(chapters__MysteriousAffair)): # I know how many chapters there are
+for i in range (14,len(chapters__MysteriousAffair)): # I know how many chapters there are
     ChapterText__MysteriousAffair.append(chapters__MysteriousAffair[i])
+
+chapters__TheMurderOnTheLinks = re.split(chaptersPattern__TheMurderOnTheLinks, FullText__TheMurderOnTheLinks)
+ChapterText__TheMurderOnTheLinks = []
+for i in range (1,len(chapters__TheMurderOnTheLinks)): # I know how many chapters there are
+    ChapterText__TheMurderOnTheLinks.append(chapters__TheMurderOnTheLinks[i])
 
 
 separators = ['.', '?', '!']
@@ -111,6 +146,9 @@ sentencesText__MysteriousAffair = []
 for chapterNumber in range (0,len(ChapterText__MysteriousAffair)):
     sentencesText__MysteriousAffair.append (re.split(pattern, ChapterText__MysteriousAffair[chapterNumber]))
 
+sentencesText__TheMurderOnTheLinks = []
+for chapterNumber in range (0,len(ChapterText__TheMurderOnTheLinks)):
+    sentencesText__TheMurderOnTheLinks.append (re.split(pattern, ChapterText__TheMurderOnTheLinks[chapterNumber]))
 
 
 
@@ -127,9 +165,9 @@ def Identities__FindOccurencesInText (identitiesList, sentences): # pass an iden
 
 InvestigatorSentencesData__TheSignOfTheFour = Identities__FindOccurencesInText(identities.Investigators__SignOfTheFour, sentencesText__TheSignOfTheFour)
 InvestigatorSentencesData__MysteriousAffair = Identities__FindOccurencesInText(identities.Investigators__MysteriousAffair, sentencesText__MysteriousAffair)
-print (InvestigatorSentencesData__TheSignOfTheFour)
-print()
-print (InvestigatorSentencesData__MysteriousAffair)
+# print (InvestigatorSentencesData__TheSignOfTheFour)
+# print()
+# print (InvestigatorSentencesData__MysteriousAffair)
 
 
 
