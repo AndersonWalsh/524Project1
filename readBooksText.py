@@ -233,6 +233,7 @@ class NovelProcessing:
 
     
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: When does the investigator (or a pair) occur for the first time -  chapter #, the sentence(s) # in a chapter
+    # Return value is TBD (likely determined by Ani's output format)
     def answer1(self, novelId):
 
         sentences = self.getSentencesText(novelId)
