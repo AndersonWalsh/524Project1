@@ -1,6 +1,10 @@
 class OutputInterface:
 
+    """ This file has interfaces for the analysis that we're doing on the crime novels. This will be used to create the output. """
+
     def investigator_pair_first_occurrence(chapter: int=None, sentence: int=None) -> dict:
+
+        """ This has details about the first occurrence of the investigator (or pair). """
 
         return
         {
@@ -10,6 +14,8 @@ class OutputInterface:
         }
 
     def first_mention_of_crime(chapter: int=None, sentence: int=None, type_of_crime: str=None, details: str = None) -> dict:
+
+        """ This has details about the first mention of the crime. """
 
         return
         {
@@ -21,6 +27,8 @@ class OutputInterface:
         }
 
     def first_mention_of_perpetrator(chapter: int = None, sentence: int = None) -> dict:
+
+        """ This has details about the first mention of the perpetrator. """
         
         return 
         {
@@ -31,6 +39,8 @@ class OutputInterface:
     
     def three_words_around_perpetrator(chapter: int = None, sentence: int = None, three_preceding_words: list = None, three_following_words: list = None) -> dict:
         
+        """ This has details about the three words that re present before and after the perpetrator. """
+
         return 
         {
             "type": "three_words_around_perpetrator",
@@ -42,6 +52,8 @@ class OutputInterface:
 
     def detective_perpetrator_cooccurrence(chapter: int = None, sentence: int = None) -> dict:
 
+        """  This has details about the instance where the detective and perpetrator appear together. """
+
         return 
         {
             "type": "detective_perpetrator_cooccurrence",
@@ -50,6 +62,9 @@ class OutputInterface:
         }
     
     def other_suspects_first_introduction(chapter: int = None, sentence: int = None, suspects: list = None) -> dict:
+
+        """ This has details about the first appearance introduction of other suspects. """
+
         return 
         {
             "type": "other_suspects_first_introduction",
