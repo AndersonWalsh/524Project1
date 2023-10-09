@@ -248,14 +248,111 @@ class NovelProcessing:
         return None
 
 
+    #take list of identity strings, return or'd regex format string
+    @staticmethod
+    def genIdentityRegex(identityList):
+        identStr = ""
+        for identity in identityList:
+            identStr += identity + '|'
+        return identStr[:-1] #pop last | char
+
+    #takes a regex pattern, query, and looks for any matches in novelStr
+    #returns boolean, true if anything was found, else false
+    @staticmethod
+    def detPattern(query, novelStr):
+        queryRes = [x for x in re.findall(query, novelStr) if (x != '')]
+        return queryRes != []
+
+    #take a sentence and use two regex patterns to extract the verbs
+    @staticmethod
+    def getVerbs(sentence):
+        keywordMatch = [x for x in re.findall('investi|discov|deduc|conclud|expos|exam|search|question|allow|inter|follow|track|pursu|verif|stud|confront|prosecut|arrest|interv|chas|identif|confront|protect|guard|trail|trac|eliminat|analyz|observ|creep|solv|detect|confess|confer|inspect|deduc|gather|uncover|interv|report|reveal|review|explor|assess|locate|find|check|tail|retriev|secur|recover|collect|proceed', sentence) if (x != '')]
+        #could be modifiers preceding matches that change tense, these are generalizations
+        presentTense = [x for x in re.findall('\\b[a-z]+ing\\b', sentence) if (x != '')]
+        #print(sentence)
+        pastTense = [x for x in re.findall('\\b[a-z]+ed\\b', sentence) if (x != '')]
+        #print(pastTense)
+        action = [x for x in re.findall('\\b[a-z]+s\\b', sentence) if (x != '')]
+        thirdPerson = [x for x in re.findall('\\b[a-z]+es\\b', sentence) if (x != '')]
+        
+        return keywordMatch, presentTense, pastTense, action, thirdPerson
+        
+    @staticmethod
+    #pass list of RE output that produced keywords, 1D, and any number of identities lists
+    #return the passed list with identities removed (don't want names popping up as verbs)
+    def popIdentities(keywordList, *identities):
+        identities = set([identity for identityList in identities for identity in identityList]) #flatten identities, make set
+        #print(keywordList)
+        keywordList = set([keyword for keywordSub in keywordList for keyword in keywordSub]) #clean up RE output, can also produce multi D list
+        return list(keywordList - identities) #returns a list, but uses set ops to remove intersection with identities
+
+
+
+
+    #for a given novel, answer when (chapter + sentence #) and how (currently, action verbs in vicinity of concurrence)
+    #returns dict of pertinent data consistent with output interface as of bcc3edd
+    #could add whether encounter happened before or after the crime by checking sentence # and chapter # against other answer call
+    def answer5(self, novelId):
+        sentences = self.getSentencesText(novelId)
+        if(novelId == 0):
+            Investigators = identities.Investigators__MysteriousAffair
+            Criminal = identities.Criminal__MysteriousAffair
+        elif(novelId == 1):
+            Investigators = identities.Investigators__SignOfTheFour
+            Criminal = identities.Criminal__SignOfTheFour
+        elif(novelId == 2):
+            Investigators = identities.Investigators__murderOnTheLinks
+            Criminal = identities.Criminal__murderOnTheLinks
+
+        chapterNum = sentenceNum = concurrence = 0
+        encounterSent = None
+        #print(Investigators)
+        #print("list should be above")
+        investigatorRe = self.genIdentityRegex(Investigators)
+        criminalRe = self.genIdentityRegex(Criminal)
+        #print(investigatorRe)
+        #print(criminalRe)
+        for chapter in sentences:
+            chapterNum += 1
+            for sentence in chapter:
+                sentenceNum += 1
+                investigatorFlag = self.detPattern(investigatorRe, sentence)
+                criminalFlag = self.detPattern(criminalRe, sentence)
+                if(investigatorFlag and criminalFlag):
+                    encounterSent = sentence
+                    concurrence = True
+                    break
+            #only get first concurrence
+            if(concurrence):
+                break
+        #print(chapterNum)
+        #print(sentenceNum)
+        if(encounterSent is None):
+            print("Sorry, it looks like the investigator and perpetrator didn't ever actually meet.")
+        else:
+            print(encounterSent)
+            return self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal)
+        #sentenceNum, chapterNum = sentenceNum + 1, chapterNum + 1
+
+
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), extract and return an answer to the given question (number corresponds to Canvas assignment)
     def extractAnswerToQuestion(self, novelId, questionId):
         
         if(questionId == 1):
             return self.answer1(novelId)
 
+        elif(questionId == 5):
+            return self.answer5(novelId)
+
         return None
 
 if __name__ == "__main__":
-    proc = NovelProcessing()
-    print(proc.SentencesText__MysteriousAffair[0][0])
+    #boolean flags to turn on and off on individual runs to test different cases
+    if(False):
+        proc = NovelProcessing()
+        print(proc.SentencesText__MysteriousAffair[0][0])
+
+    #case 5 testing
+    if(True):
+        proc = NovelProcessing()
+        print(proc.answer5(0))
