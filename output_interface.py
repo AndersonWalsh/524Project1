@@ -50,7 +50,7 @@ class OutputInterface:
             "three_following_words": following_words or []
         }
 
-    def detective_perpetrator_cooccurrence(chapter: int = None, sentence: int = None) -> dict:
+    def detective_perpetrator_cooccurrence(chapter: int = None, sentence: int = None, how: list = None) -> dict:
 
         """  This has details about the instance where the detective and perpetrator appear together. """
 
@@ -59,6 +59,8 @@ class OutputInterface:
             "type": "detective_perpetrator_cooccurrence",
             "chapter": chapter,
             "sentence": sentence,
+            "how": how or []
+
         }
     
     def other_suspects_first_introduction(chapter: int = None, sentence: int = None, suspects: list = None) -> dict:
