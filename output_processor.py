@@ -44,6 +44,7 @@ class OutputProcessor:
         """ for the co-occurrence of detective and perpetrator """
         
         data = self.interface.detective_perpetrator_cooccurrence(chapter, sentence)
+        data["how"] = ", ".join(data["how"])
         return self.templates["detective_perpetrator_cooccurrence"].format(**data)
 
     def process_other_suspects_first_introduction(self, chapter: int, sentence: int, suspects: list) -> str:
