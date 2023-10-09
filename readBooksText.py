@@ -290,8 +290,9 @@ class NovelProcessing:
 
 
     #for a given novel, answer when (chapter + sentence #) and how (currently, action verbs in vicinity of concurrence)
-    #returns dict of pertinent data consistent with output interface as of bcc3edd
+    #returns list of verbs, needs update for output interface
     #could add whether encounter happened before or after the crime by checking sentence # and chapter # against other answer call
+    #currently only detects concurrence by name in sentence, novel ID 2 first "encounter" by this standard is investigator mentioning criminal
     def answer5(self, novelId):
         sentences = self.getSentencesText(novelId)
         if(novelId == 0):
