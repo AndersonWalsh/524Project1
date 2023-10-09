@@ -6,9 +6,9 @@ response_templates = {
 
     "first_mention_of_perpetrator": "The perpetrator is first mentioned in Chapter {chapter}, Sentence {sentence}.",
     
-    "three_words_around_perpetrator": "In Chapter {chapter}, Sentence {sentence}, the three words preceding perpetrator are: {three_preceding_words} and the three words following perpetrator are: {three_following_words}.",
+    "three_words_around_perpetrator": "In Chapter {chapter}, Sentence {sentence}, the three words preceding perpetrator are: {three_preceding_words} and the three words following perpetrator are: {three_following_words}."  ,
     
-    "detective_perpetrator_cooccurrence": "The detective and perpetrator appear together in Chapter {chapter}, Sentence {sentence}.",
+    "detective_perpetrator_cooccurrence": "The detective and perpetrator appear together in Chapter {chapter}, Sentence {sentence}. The verbs that are used to describe are {how}",
     
     "other_suspects_first_introduction": "Other suspects are first introduced in Chapter {chapter}, Sentence {sentence}. Here are some details about them: {suspects}."
 }
