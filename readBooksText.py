@@ -283,7 +283,7 @@ class NovelProcessing:
     def popIdentities(keywordList, *identities):
         identities = set([identity for identityList in identities for identity in identityList]) #flatten identities, make set
         #print(keywordList)
-        keywordList = set([keyword for keywordSub in keywordList for keyword in keywordSub]) #clean up RE output, can also produce multi D list
+        keywordList = set([keyword for keywordSub in keywordList for keyword in keywordSub]) #clean up RE output, can also produce multi D list. Actually is consequence of getVerbs output, but this may be a desirable check anyway
         return list(keywordList - identities) #returns a list, but uses set ops to remove intersection with identities
 
 
@@ -332,7 +332,7 @@ class NovelProcessing:
             print("Sorry, it looks like the investigator and perpetrator didn't ever actually meet.")
         else:
             print(encounterSent)
-            return self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal)
+            return {"chapterNum": chapterNum, "sentenceNum": sentenceNum, "verbs": self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal)}
         #sentenceNum, chapterNum = sentenceNum + 1, chapterNum + 1
 
 
