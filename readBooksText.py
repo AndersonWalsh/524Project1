@@ -402,8 +402,8 @@ class NovelProcessing:
         if(encounterSent is None):
             print("Sorry, it looks like the investigator and perpetrator didn't ever actually meet.")
         else:
-            print(encounterSent)
-            return {"chapterNum": chapterNum, "sentenceNum": sentenceNum, "verbs": self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal)}
+            #print(encounterSent)
+            return {"chapter": chapterNum, "sentence": sentenceNum, "how": self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal)}
         #sentenceNum, chapterNum = sentenceNum + 1, chapterNum + 1
 
 
