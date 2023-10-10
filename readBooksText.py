@@ -58,6 +58,28 @@ def Identities__FindOccurencesInText (identitiesList, sentences): # pass an iden
                         #print ("character ", identity, " occured in chapter ", chapterIndex+1, " in sentence number " , sentenceIndex+1)
         return RelevantSentencesData
 
+def FindThreeWordsAround (identitiesList, sentences):
+    PrecedingFollowingThreeWords = []
+    for identity in identitiesList:
+        for chapterIndex in range (0,len(sentences)):
+            for sentenceIndex in range (0, len(sentences[chapterIndex])):
+                if (identity in sentences[chapterIndex][sentenceIndex]):
+                    sentence = sentences[chapterIndex][sentenceIndex]
+                    splitSentence = sentence.split(identity)
+                    precedingWords = splitSentence[0].split()
+                    preceding3Words = precedingWords[-3:]
+                    preceding3WordsJoined = ' '.join(preceding3Words)
+                    #print (preceding3WordsJoined)
+
+                    followingWords = splitSentence[1].split()
+                    following3Words = followingWords[:3]
+                    following3WordsJoined = ' '.join(following3Words)
+
+                    PrecedingFollowingThreeWords.append ((preceding3WordsJoined, identity, following3WordsJoined,chapterIndex+1, sentenceIndex+1 ))
+                    #print ("character ", identity, " occured in chapter ", chapterIndex+1, " in sentence number " , sentenceIndex+1)
+    return PrecedingFollowingThreeWords
+
+
 
 class NovelProcessing:
     def __init__(self):
@@ -237,15 +259,69 @@ class NovelProcessing:
     def answer1(self, novelId):
 
         sentences = self.getSentencesText(novelId)
-
+        InvestigatorSentencesData = []
+        
         if(novelId == 0):
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__MysteriousAffair, sentences)
         elif(novelId == 1):
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__SignOfTheFour, sentences)
         elif(novelId == 2):
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__murderOnTheLinks, sentences)
+        return InvestigatorSentencesData[0]
+    
+    # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
+    # When is the perpetrator first mentioned - chapter #, the sentence(s) # in a chapter
+    def answer3(self,novelId):
+        sentences = self.getSentencesText(novelId)
+        PerpetratorSentencesData = []
+        if(novelId == 0):
+            PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__MysteriousAffair, sentences)
+        elif(novelId == 1):
+            PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__SignOfTheFour, sentences)
+        elif(novelId == 2):
+            PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__murderOnTheLinks, sentences)
+        return PerpetratorSentencesData[0]
+    
 
-        return None
+
+
+    # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
+    # What are the three words that occur around the perpetrator on each mention 
+    # (i.e., the three words preceding and the three words following the mention of a perpetrator),
+    def answer4(self,novelId):
+        sentences = self.getSentencesText(novelId)
+        PrecedingFollowing3SentencesData = []
+        if(novelId == 0):
+            PrecedingFollowing3SentencesData = FindThreeWordsAround(identities.Criminal__MysteriousAffair, sentences)
+        elif(novelId == 1):
+            PrecedingFollowing3SentencesData = FindThreeWordsAround(identities.Criminal__SignOfTheFour, sentences)
+        elif(novelId == 2):
+            PrecedingFollowing3SentencesData = FindThreeWordsAround(identities.Criminal__murderOnTheLinks, sentences)
+
+        return (PrecedingFollowing3SentencesData)
+
+    # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
+    # When are other suspects first introduced - chapter #, the sentence(s) # in a chapter
+    def answer6(self,novelId):
+        sentences = self.getSentencesText(novelId)
+        SuspectsSentencesData = []
+        if(novelId == 0):
+            SuspectsSentencesData = Identities__FindOccurencesInText(identities.Suspects__MysteriousAffair, sentences)
+        elif(novelId == 1):
+            SuspectsSentencesData = Identities__FindOccurencesInText(identities.Suspects__SignOfTheFour, sentences)
+        elif(novelId == 2):
+            SuspectsSentencesData = Identities__FindOccurencesInText(identities.Suspects__murderOnTheLinks, sentences)
+        finalListOfAllSuspectOccurences = []
+        seen = set()
+        uniqueData = []
+        for element in SuspectsSentencesData:
+            if element[0] not in seen :
+                seen.add(element[0])
+                uniqueData.append(element)
+        
+        
+        return uniqueData   #NOT finished yet! need to filter out the same suspects mentioned by the full name vs just by last name
+
 
 
     #take list of identity strings, return or'd regex format string
@@ -356,4 +432,9 @@ if __name__ == "__main__":
     #case 5 testing
     if(True):
         proc = NovelProcessing()
-        print(proc.answer5(0))
+        print (proc.answer1(0))
+
+        print (proc.answer3(0))
+        print (proc.answer4(0))
+        #print(proc.answer5(0))
+        print (proc.answer6(0))
