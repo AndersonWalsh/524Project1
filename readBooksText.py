@@ -222,7 +222,6 @@ class NovelProcessing:
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), return ALL of its sentences as a list of lists of strings (Outside list is keyed on chapter, inside lists are keyed on sentence number relative to the start of the chapter, each value of inside lists is a single sentence)
     def getSentencesText(self, novelId):
-
         separators = ['.', '?', '!']
         pattern = '|'.join(map(re.escape, separators))
         novelChapters = self.getChaptersText(novelId)
@@ -257,7 +256,6 @@ class NovelProcessing:
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: When does the investigator (or a pair) occur for the first time -  chapter #, the sentence(s) # in a chapter
     # Return value is TBD (likely determined by Ani's output format)
     def answer1(self, novelId):
-
         sentences = self.getSentencesText(novelId)
         InvestigatorSentencesData = []
         
@@ -282,8 +280,6 @@ class NovelProcessing:
             PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__murderOnTheLinks, sentences)
         return PerpetratorSentencesData[0]
     
-
-
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
     # What are the three words that occur around the perpetrator on each mention 
@@ -318,9 +314,8 @@ class NovelProcessing:
             if element[0] not in seen :
                 seen.add(element[0])
                 uniqueData.append(element)
-        
-        
         return uniqueData   #NOT finished yet! need to filter out the same suspects mentioned by the full name vs just by last name
+
 
 
 
@@ -432,9 +427,8 @@ if __name__ == "__main__":
     #case 5 testing
     if(True):
         proc = NovelProcessing()
-        print (proc.answer1(0))
-
-        print (proc.answer3(0))
-        print (proc.answer4(0))
-        #print(proc.answer5(0))
-        print (proc.answer6(0))
+        # print (proc.answer1(0))
+        # print (proc.answer3(0))
+        # print (proc.answer4(0))
+        print(proc.answer5(0))
+        # print (proc.answer6(0))
