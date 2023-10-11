@@ -64,10 +64,10 @@ def detPerp(line):
     return re.findall('commit|crimin|perp|murderer|killer|thief|bad|evil|marthe|daubreuil|tonga|small|sholto|alf|inglethorp|felon|crook|robber|burglar', line)
 
 def detAdj(line):
-    return re.findall('adjac|around|near|close|next|border|neigh', line)
+    return re.findall('adjac|around|near|close|next|border|neigh|surround', line)
 
 def detConc(line):
-    return re.findall('meet|concur|clash|fight|talk|speak|capture|detain|arrest|apprehend|convers|contact|face|see|altercat|conflict|brawl|exchang|skirmi|scuffl|chat|exchang|imprison|jail|incarcer|interrogat', line)
+    return re.findall('meet|concur|clash|fight|talk|speak|capture|detain|arrest|apprehend|convers|contact|face|see|altercat|conflict|brawl|exchang|skirmi|scuffl|chat|exchang|imprison|jail|incarcer|interrogat|pair|co.?occur', line)
 
 def detSus(line):
     return re.findall('poss|inter|susp|potent|jack|bella|duveen|morstan|small|jonathan|john|thaddeus|evelyn|howard|cynthia|murdoch|mary|cavendish|lawrence|conceiv|feas|plaus|proba|viabl|likel', line)
@@ -171,7 +171,7 @@ det_funcs_novel = [det_MysAff, det_Sof, det_Mol]
 switchRe = 'switch|change|move|go on|go for|shift|replace|turn'
 
 def det_Switch(line):
-    return re.findall('switch|change|move|go on|go for|shift|replace|turn', line)
+    return re.findall('switch|change|move|go on|go for|shift|replace|turn|transition', line)
 
 def extractNovel(line, funcs=det_funcs_novel):
     novel = getPromptsList([], line, funcs)

@@ -15,7 +15,6 @@ if __name__ == "__main__":
         if(novelProc.detPattern(p_in.switchRe, query)):
             print("Ok, we'll switch to that one.")
             novelProc.cur_novel_id = p_in.extractNovel(query)
-            print(novelProc.cur_novel_id)
             continue
         '''if(p_in.doubleQuery):
             print(p_in.extractPrompt(query))''' #not currently handling this case of intersection
