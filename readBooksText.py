@@ -268,7 +268,13 @@ class NovelProcessing:
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__SignOfTheFour, sentences)
         elif(self.cur_novel_id == 2):
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__murderOnTheLinks, sentences)
-        return InvestigatorSentencesData[0]
+        
+        return {
+            "type": "investigator_pair_first_occurrence",
+            "name": InvestigatorSentencesData[0][0],
+            "chapter": InvestigatorSentencesData[0][1],
+            "sentence": InvestigatorSentencesData[0][2],
+        }
     
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
     # When is the perpetrator first mentioned - chapter #, the sentence(s) # in a chapter
@@ -281,7 +287,12 @@ class NovelProcessing:
             PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__SignOfTheFour, sentences)
         elif(self.cur_novel_id == 2):
             PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__murderOnTheLinks, sentences)
-        return PerpetratorSentencesData[0]
+        return {
+                "type": "first_mention_of_perpetrator",
+                "name": PerpetratorSentencesData[0][0],
+                "chapter": PerpetratorSentencesData[0][1],
+                "sentence": PerpetratorSentencesData[0][2],
+            }
     
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
@@ -345,9 +356,18 @@ class NovelProcessing:
             if element[0] not in seen :
                 seen.add(element[0])
                 finalListOfAllSuspectOccurences.append(element)
-
-        return finalListOfAllSuspectOccurences
-
+        
+        if (len(finalListOfAllSuspectOccurences)>1):
+            ReturnValue = []
+            for occurrence in finalListOfAllSuspectOccurences:
+                dictionary = {"type" : occurrence[0], "chapter" : occurrence[1], "sentence": occurrence[2]}
+                ReturnValue.append(dictionary)
+            return ReturnValue
+        elif (len(finalListOfAllSuspectOccurences)==1):
+            ReturnDictionary = {"type" : finalListOfAllSuspectOccurences[0][0], "chapter" : finalListOfAllSuspectOccurences[0][1], "sentence": finalListOfAllSuspectOccurences[0][2]}
+            return ReturnDictionary
+        else:
+            return None
 
 
     #take list of identity strings, return or'd regex format string
@@ -480,8 +500,8 @@ if __name__ == "__main__":
     #case 5 testing
     if(True):
         proc = NovelProcessing()
-        # print (proc.answer1(0))
-        # print (proc.answer3(0))
+        print (proc.answer1())
+        print (proc.answer3())
         # print (proc.answer4(0))
         print(proc.answer5())
         print (proc.answer6())
