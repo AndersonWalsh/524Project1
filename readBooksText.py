@@ -76,6 +76,7 @@ def FindThreeWordsAround (identitiesList, sentences):
                     following3WordsJoined = ' '.join(following3Words)
 
                     PrecedingFollowingThreeWords.append ((preceding3WordsJoined, identity, following3WordsJoined,chapterIndex+1, sentenceIndex+1 ))
+                    PrecedingFollowingThreeWords.sort(key=lambda x: x[1])
                     #print ("character ", identity, " occured in chapter ", chapterIndex+1, " in sentence number " , sentenceIndex+1)
     return PrecedingFollowingThreeWords
 
@@ -458,6 +459,6 @@ if __name__ == "__main__":
         proc = NovelProcessing()
         # print (proc.answer1(0))
         # print (proc.answer3(0))
-        # print (proc.answer4(0))
-        #print(proc.answer5(0))
-        print (proc.answer6(2))
+        print (proc.answer4(0))
+        # print(proc.answer5(0))
+        # print (proc.answer6(2))
