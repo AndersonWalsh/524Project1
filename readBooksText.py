@@ -337,13 +337,13 @@ class NovelProcessing:
     #take a sentence and use two regex patterns to extract the verbs
     @staticmethod
     def getVerbs(sentence):
-        keywordMatch = [x for x in re.findall('investi|discov|deduc|conclud|expos|exam|search|question|allow|inter|follow|track|pursu|verif|stud|confront|prosecut|arrest|interv|chas|identif|confront|protect|guard|trail|trac|eliminat|analyz|observ|creep|solv|detect|confess|confer|inspect|deduc|gather|uncover|interv|report|reveal|review|explor|assess|locate|find|check|tail|retriev|secur|recover|collect|proceed', sentence) if (x != '')]
+        keywordMatch = [x for x in re.findall('\\b(investi|discov|deduc|conclud|expos|exam|search|question|allow|inter|follow|track|pursu|verif|stud|confront|prosecut|arrest|interv|chas|identif|confront|protect|guard|trail|trac|eliminat|analyz|observ|creep|solv|detect|confess|confer|inspect|deduc|gather|uncover|interv|report|reveal|review|explor|assess|locate|find|check|tail|retriev|secur|recover|collect|proceed)(\\w+)?\\b', sentence) if (x != '')]
         #could be modifiers preceding matches that change tense, these are generalizations
         presentTense = [x for x in re.findall('\\b[a-z]+ing\\b', sentence) if (x != '')]
         #print(sentence)
         pastTense = [x for x in re.findall('\\b[a-z]+ed\\b', sentence) if (x != '')]
         #print(pastTense)
-        action = [x for x in re.findall('\\b[a-z]+s\\b', sentence) if (x != '')]
+        action = [x for x in re.findall('\\b[a-z]+s\\b', sentence) if (x != '')] #very likely too general
         thirdPerson = [x for x in re.findall('\\b[a-z]+es\\b', sentence) if (x != '')]
         
         return keywordMatch, presentTense, pastTense, action, thirdPerson
@@ -357,8 +357,17 @@ class NovelProcessing:
         keywordList = set([keyword for keywordSub in keywordList for keyword in keywordSub]) #clean up RE output, can also produce multi D list. Actually is consequence of getVerbs output, but this may be a desirable check anyway
         return list(keywordList - identities) #returns a list, but uses set ops to remove intersection with identities
 
-
-
+    @staticmethod
+    #pass list of regex output
+    #returns list with any tuples of strings flattened, concatenated to 1 string
+    def concatReTup(reOutList):
+        for i, match in enumerate(reOutList):
+            if(isinstance(match, tuple)):
+                tupleConcat = ""
+                for substr in match:
+                    tupleConcat += substr
+                reOutList[i] = tupleConcat
+        return reOutList
 
     #for a given novel, answer when (chapter + sentence #) and how (currently, action verbs in vicinity of concurrence)
     #returns list of verbs, needs update for output interface
@@ -402,8 +411,8 @@ class NovelProcessing:
         if(encounterSent is None):
             print("Sorry, it looks like the investigator and perpetrator didn't ever actually meet.")
         else:
-            #print(encounterSent)
-            return {"chapter": chapterNum, "sentence": sentenceNum, "how": self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal)}
+            print(encounterSent)
+            return {"chapter": chapterNum, "sentence": sentenceNum, "how": self.concatReTup(self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal))}
         #sentenceNum, chapterNum = sentenceNum + 1, chapterNum + 1
 
 
@@ -430,5 +439,5 @@ if __name__ == "__main__":
         # print (proc.answer1(0))
         # print (proc.answer3(0))
         # print (proc.answer4(0))
-        print(proc.answer5(0))
+        print(proc.answer5(2))
         # print (proc.answer6(0))
