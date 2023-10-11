@@ -184,3 +184,19 @@
         * Presentation slides
         * 2 page report
 - Last meeting: Sunday, time TBD
+
+# 10/11/23 Meeting 3 Notes
+- Andy
+    * Question 5 implemented
+    * Main loop for user interface implemented
+    * Next task: presentation materials
+- Alex
+    * Other questions (except 2) implemented, getting output in correct format
+    * May need extra hands on "suspects" inquiry due to situational volume of suspects 
+- Bryson
+    * Moving on to question 2 shortly, should be good for Friday deadline
+- Ani
+    * Has test case for output now with formatted argument via question 5 from main loop, will begin validating
+## Next Meeting
+- Sunday at 2PM
+    * Presentation and documentation validation
