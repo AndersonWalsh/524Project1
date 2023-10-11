@@ -168,6 +168,11 @@ def det_Mol(line):
 
 det_funcs_novel = [det_MysAff, det_Sof, det_Mol]
 
+switchRe = 'switch|change|move|go on|go for|shift|replace|turn'
+
+def det_Switch(line):
+    return re.findall('switch|change|move|go on|go for|shift|replace|turn', line)
+
 def extractNovel(line, funcs=det_funcs_novel):
     novel = getPromptsList([], line, funcs)
 

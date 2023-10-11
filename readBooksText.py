@@ -85,6 +85,7 @@ def FindThreeWordsAround (identitiesList, sentences):
 class NovelProcessing:
     def __init__(self):
 
+        self.cur_novel_id = 0
         # Init novel full text as empty strs
         self.FullText__MysteriousAffair = ''
         self.FullText__TheSignOfTheFour = ''
@@ -102,7 +103,8 @@ class NovelProcessing:
 
         # Sets all object variables above to correct values when object is created
         for i in range(3):
-            self.getSentencesText(i)
+            self.cur_novel_id = i
+            self.getSentencesText()
 
 
     # Make Project Gutenberg requests to get novel text and (re)generate novel clean text files
@@ -150,9 +152,9 @@ class NovelProcessing:
 
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), return its full text as a single string
-    def getFullText(self, novelId):
+    def getFullText(self):
         
-        if(novelId == 0):
+        if(self.cur_novel_id == 0):
             if(self.FullText__MysteriousAffair == ''):
 
                 if(not CheckFileExists('TheMysteriousAffairAtStylesCLEANED.txt')):
@@ -163,7 +165,7 @@ class NovelProcessing:
             
             return self.FullText__MysteriousAffair
         
-        elif(novelId == 1):
+        elif(self.cur_novel_id == 1):
             if(self.FullText__TheSignOfTheFour == ''):
 
                 if(not CheckFileExists('TheSignOfTheFourCLEANED.txt')):
@@ -174,7 +176,7 @@ class NovelProcessing:
             
             return self.FullText__TheSignOfTheFour
         
-        elif(novelId == 2):
+        elif(self.cur_novel_id == 2):
             if(self.FullText__TheMurderOnTheLinks == ''):
 
                 if(not CheckFileExists('TheMurderOnTheLinksCLEANED.txt')):
@@ -189,31 +191,31 @@ class NovelProcessing:
 
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), return ALL of its chapters as a list of strings (each string is the text for a full chapter)
-    def getChaptersText(self, novelId):
+    def getChaptersText(self):
 
-        if(novelId == 0 and self.ChapterText__MysteriousAffair):
+        if(self.cur_novel_id == 0 and self.ChapterText__MysteriousAffair):
             return self.ChapterText__MysteriousAffair
-        elif(novelId == 1 and self.ChapterText__TheSignOfTheFour):
+        elif(self.cur_novel_id == 1 and self.ChapterText__TheSignOfTheFour):
             return self.ChapterText__TheSignOfTheFour
-        elif(novelId == 2 and self.ChapterText__TheMurderOnTheLinks):
+        elif(self.cur_novel_id == 2 and self.ChapterText__TheMurderOnTheLinks):
             return self.ChapterText__TheMurderOnTheLinks
 
-        if(novelId == 0 or novelId == 1):
+        if(self.cur_novel_id == 0 or self.cur_novel_id == 1):
             chaptersPattern = '|'.join(CHAPTER_KEYWORDS)
-        elif(novelId == 2):
+        elif(self.cur_novel_id == 2):
             chaptersPattern = '|'.join(CHAPTER_KEYWORDS_THE_MURDER_ON_THE_LINKS)
 
-        chapters = re.split(chaptersPattern, self.getFullText(novelId))
+        chapters = re.split(chaptersPattern, self.getFullText())
 
-        if(novelId == 0):
+        if(self.cur_novel_id == 0):
             for i in range (14,len(chapters)): # I know how many chapters there are
                 self.ChapterText__MysteriousAffair.append(chapters[i])
             return self.ChapterText__MysteriousAffair
-        elif(novelId == 1):
+        elif(self.cur_novel_id == 1):
             for i in range (13,len(chapters)): # I know how many chapters there are
                 self.ChapterText__TheSignOfTheFour.append(chapters[i])
             return self.ChapterText__TheSignOfTheFour
-        elif(novelId == 2):
+        elif(self.cur_novel_id == 2):
             for i in range (1,len(chapters)): # I know how many chapters there are
                 self.ChapterText__TheMurderOnTheLinks.append(chapters[i])
             return self.ChapterText__TheMurderOnTheLinks
@@ -222,12 +224,12 @@ class NovelProcessing:
     
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), return ALL of its sentences as a list of lists of strings (Outside list is keyed on chapter, inside lists are keyed on sentence number relative to the start of the chapter, each value of inside lists is a single sentence)
-    def getSentencesText(self, novelId):
+    def getSentencesText(self):
         separators = ['.', '?', '!']
         pattern = '|'.join(map(re.escape, separators))
-        novelChapters = self.getChaptersText(novelId)
+        novelChapters = self.getChaptersText()
 
-        if(novelId == 0):
+        if(self.cur_novel_id == 0):
 
             if(not self.SentencesText__MysteriousAffair):
                 for chapterNumber in range (0,len(novelChapters)):
@@ -235,7 +237,7 @@ class NovelProcessing:
 
             return self.SentencesText__MysteriousAffair
         
-        elif(novelId == 1):
+        elif(self.cur_novel_id == 1):
 
             if(not self.SentencesText__TheSignOfTheFour):
                 for chapterNumber in range (0,len(novelChapters)):
@@ -243,7 +245,7 @@ class NovelProcessing:
 
             return self.SentencesText__TheSignOfTheFour
         
-        elif(novelId == 2):
+        elif(self.cur_novel_id == 2):
 
             if(not self.SentencesText__TheMurderOnTheLinks):
                 for chapterNumber in range (0,len(novelChapters)):
@@ -256,28 +258,28 @@ class NovelProcessing:
     
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: When does the investigator (or a pair) occur for the first time -  chapter #, the sentence(s) # in a chapter
     # Return value is TBD (likely determined by Ani's output format)
-    def answer1(self, novelId):
-        sentences = self.getSentencesText(novelId)
+    def answer1(self):
+        sentences = self.getSentencesText()
         InvestigatorSentencesData = []
         
-        if(novelId == 0):
+        if(self.cur_novel_id == 0):
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__MysteriousAffair, sentences)
-        elif(novelId == 1):
+        elif(self.cur_novel_id == 1):
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__SignOfTheFour, sentences)
-        elif(novelId == 2):
+        elif(self.cur_novel_id == 2):
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__murderOnTheLinks, sentences)
         return InvestigatorSentencesData[0]
     
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
     # When is the perpetrator first mentioned - chapter #, the sentence(s) # in a chapter
-    def answer3(self,novelId):
-        sentences = self.getSentencesText(novelId)
+    def answer3(self):
+        sentences = self.getSentencesText()
         PerpetratorSentencesData = []
-        if(novelId == 0):
+        if(self.cur_novel_id == 0):
             PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__MysteriousAffair, sentences)
-        elif(novelId == 1):
+        elif(self.cur_novel_id == 1):
             PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__SignOfTheFour, sentences)
-        elif(novelId == 2):
+        elif(self.cur_novel_id == 2):
             PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__murderOnTheLinks, sentences)
         return PerpetratorSentencesData[0]
     
@@ -285,66 +287,37 @@ class NovelProcessing:
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
     # What are the three words that occur around the perpetrator on each mention 
     # (i.e., the three words preceding and the three words following the mention of a perpetrator),
-    def answer4(self,novelId):
-        sentences = self.getSentencesText(novelId)
+    def answer4(self):
+        sentences = self.getSentencesText()
         PrecedingFollowing3SentencesData = []
-        if(novelId == 0):
+        if(self.cur_novel_id == 0):
             PrecedingFollowing3SentencesData = FindThreeWordsAround(identities.Criminal__MysteriousAffair, sentences)
-        elif(novelId == 1):
+        elif(self.cur_novel_id == 1):
             PrecedingFollowing3SentencesData = FindThreeWordsAround(identities.Criminal__SignOfTheFour, sentences)
-        elif(novelId == 2):
+        elif(self.cur_novel_id == 2):
             PrecedingFollowing3SentencesData = FindThreeWordsAround(identities.Criminal__murderOnTheLinks, sentences)
 
         return (PrecedingFollowing3SentencesData)
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
     # When are other suspects first introduced - chapter #, the sentence(s) # in a chapter
-    def answer6(self,novelId):
-        sentences = self.getSentencesText(novelId)
+    def answer6(self):
+        sentences = self.getSentencesText()
         SuspectsSentencesData = []
-        suspectList = []
-        if(novelId == 0):
-            suspectList = identities.Suspects__MysteriousAffair
-            SuspectsSentencesData = Identities__FindOccurencesInText(suspectList, sentences)
-        elif(novelId == 1):
-            suspectList = identities.Suspects__SignOfTheFour
-            SuspectsSentencesData = Identities__FindOccurencesInText(suspectList, sentences)
-        elif(novelId == 2):
-            suspectList = identities.Suspects__murderOnTheLinks
-            SuspectsSentencesData = Identities__FindOccurencesInText(suspectList, sentences)
+        if(self.cur_novel_id == 0):
+            SuspectsSentencesData = Identities__FindOccurencesInText(identities.Suspects__MysteriousAffair, sentences)
+        elif(self.cur_novel_id == 1):
+            SuspectsSentencesData = Identities__FindOccurencesInText(identities.Suspects__SignOfTheFour, sentences)
+        elif(self.cur_novel_id == 2):
+            SuspectsSentencesData = Identities__FindOccurencesInText(identities.Suspects__murderOnTheLinks, sentences)
         finalListOfAllSuspectOccurences = []
-        
         seen = set()
         uniqueData = []
-        FirstLastNamesList = []
-        for name in suspectList:
-            if (' ' in name):
-                FirstLastNamesList.append(name)
         for element in SuspectsSentencesData:
             if element[0] not in seen :
                 seen.add(element[0])
                 uniqueData.append(element)
-
-        #check if there is a longer name available
-        ExtendNamesList = []
-        for element in uniqueData:
-            FullName = ""
-            for i in range (0, len(FirstLastNamesList)):
-                if ((element[0] in FirstLastNamesList[i])):
-                    FullName = FirstLastNamesList[i]
-                    ExtendNamesList.append((FullName, element[1], element[2]))
-        
-        ExtendNamesList.sort()
-
-        seen = set()
-        finalListOfAllSuspectOccurences = []
-        FirstLastNamesList = []
-        for element in ExtendNamesList:
-            if element[0] not in seen :
-                seen.add(element[0])
-                finalListOfAllSuspectOccurences.append(element)
-        
-        return finalListOfAllSuspectOccurences
+        return uniqueData   #NOT finished yet! need to filter out the same suspects mentioned by the full name vs just by last name
 
 
 
@@ -403,15 +376,15 @@ class NovelProcessing:
     #returns list of verbs, needs update for output interface
     #could add whether encounter happened before or after the crime by checking sentence # and chapter # against other answer call
     #currently only detects concurrence by name in sentence, novel ID 2 first "encounter" by this standard is investigator mentioning criminal
-    def answer5(self, novelId):
-        sentences = self.getSentencesText(novelId)
-        if(novelId == 0):
+    def answer5(self):
+        sentences = self.getSentencesText()
+        if(self.cur_novel_id == 0):
             Investigators = identities.Investigators__MysteriousAffair
             Criminal = identities.Criminal__MysteriousAffair
-        elif(novelId == 1):
+        elif(self.cur_novel_id == 1):
             Investigators = identities.Investigators__SignOfTheFour
             Criminal = identities.Criminal__SignOfTheFour
-        elif(novelId == 2):
+        elif(self.cur_novel_id == 2):
             Investigators = identities.Investigators__murderOnTheLinks
             Criminal = identities.Criminal__murderOnTheLinks
 
@@ -447,13 +420,26 @@ class NovelProcessing:
 
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), extract and return an answer to the given question (number corresponds to Canvas assignment)
-    def extractAnswerToQuestion(self, novelId, questionId):
+    def extractAnswerToQuestion(self, questionId):
         
         if(questionId == 1):
-            return self.answer1(novelId)
+            return self.answer1()
+
+        elif(questionId == 2):
+            #return self.answer2() #not yet implemented
+            pass
+
+        elif(questionId == 3):
+            return self.answer3()
+
+        elif(questionId == 4):
+            return self.answer4()
 
         elif(questionId == 5):
-            return self.answer5(novelId)
+            return self.answer5()
+        
+        elif(questionId == 6):
+            return self.answer6()
 
         return None
 
@@ -468,6 +454,6 @@ if __name__ == "__main__":
         proc = NovelProcessing()
         # print (proc.answer1(0))
         # print (proc.answer3(0))
-        print (proc.answer4(0))
-        # print(proc.answer5(0))
-        # print (proc.answer6(2))
+        # print (proc.answer4(0))
+        print(proc.answer5())
+        # print (proc.answer6(0))
