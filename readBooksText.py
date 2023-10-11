@@ -301,20 +301,49 @@ class NovelProcessing:
     def answer6(self,novelId):
         sentences = self.getSentencesText(novelId)
         SuspectsSentencesData = []
+        suspectList = []
         if(novelId == 0):
-            SuspectsSentencesData = Identities__FindOccurencesInText(identities.Suspects__MysteriousAffair, sentences)
+            suspectList = identities.Suspects__MysteriousAffair
+            SuspectsSentencesData = Identities__FindOccurencesInText(suspectList, sentences)
         elif(novelId == 1):
-            SuspectsSentencesData = Identities__FindOccurencesInText(identities.Suspects__SignOfTheFour, sentences)
+            suspectList = identities.Suspects__SignOfTheFour
+            SuspectsSentencesData = Identities__FindOccurencesInText(suspectList, sentences)
         elif(novelId == 2):
-            SuspectsSentencesData = Identities__FindOccurencesInText(identities.Suspects__murderOnTheLinks, sentences)
+            suspectList = identities.Suspects__murderOnTheLinks
+            SuspectsSentencesData = Identities__FindOccurencesInText(suspectList, sentences)
         finalListOfAllSuspectOccurences = []
+        
         seen = set()
         uniqueData = []
+        FirstLastNamesList = []
+        for name in suspectList:
+            if (' ' in name):
+                FirstLastNamesList.append(name)
         for element in SuspectsSentencesData:
             if element[0] not in seen :
                 seen.add(element[0])
                 uniqueData.append(element)
-        return uniqueData   #NOT finished yet! need to filter out the same suspects mentioned by the full name vs just by last name
+
+        #check if there is a longer name available
+        ExtendNamesList = []
+        for element in uniqueData:
+            FullName = ""
+            for i in range (0, len(FirstLastNamesList)):
+                if ((element[0] in FirstLastNamesList[i])):
+                    FullName = FirstLastNamesList[i]
+                    ExtendNamesList.append((FullName, element[1], element[2]))
+        
+        ExtendNamesList.sort()
+
+        seen = set()
+        finalListOfAllSuspectOccurences = []
+        FirstLastNamesList = []
+        for element in ExtendNamesList:
+            if element[0] not in seen :
+                seen.add(element[0])
+                finalListOfAllSuspectOccurences.append(element)
+        
+        return finalListOfAllSuspectOccurences
 
 
 
@@ -430,5 +459,5 @@ if __name__ == "__main__":
         # print (proc.answer1(0))
         # print (proc.answer3(0))
         # print (proc.answer4(0))
-        print(proc.answer5(0))
-        # print (proc.answer6(0))
+        #print(proc.answer5(0))
+        print (proc.answer6(2))

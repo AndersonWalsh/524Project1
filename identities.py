@@ -30,8 +30,8 @@ Suspects: Arthur Morstan, Jonathan Small, Thaddeus
 
 Investigators__SignOfTheFour = ['sherlock holmes', 'john watson', 'holmes', 'watson', 'sherlock']
 Criminal__SignOfTheFour = ['tonga', 'small', 'sholto']
-Suspects__SignOfTheFour = ['arthur morstan', 'morstan', 'arthur'
-                           'jonathan small', 'small', 'jonathan'
+Suspects__SignOfTheFour = ['arthur morstan', 'morstan', 'arthur',
+                           'jonathan small', 'small', 'jonathan',
                            'thaddeus']
 Crime__SignOfTheFour = ['theft', 'murder', 'prison escape', 'conspiracy']
 
@@ -49,11 +49,11 @@ Investigators__MysteriousAffair = ['hercule poirot', 'poirot, monsieur poirot', 
                                    'arthur hastings', 'hastings',
                                    ]
 Criminal__MysteriousAffair = ['alfred inglethorp', 'inglethorp', 'alfred']
-Suspects__MysteriousAffair = ['alfred inglethorp', 'inglethorp', 'alfred'
-                              'evelyn howard', 'evelyn', 'howard'
-                              'cynthia murdoch', 'cynthia', 'murdoch'
+Suspects__MysteriousAffair = ['alfred inglethorp', 'inglethorp', 'alfred',
+                              'evelyn howard', 'evelyn', 'howard',
+                              'cynthia murdoch', 'cynthia', 'murdoch',
                               'mary cavendish', 'mary', 'cavendish',
-                              'lawrence cavendish', 'lawrence'
+                              'lawrence cavendish', 'lawrence',
                               'john cavendish', 'john'
                               ]
 Crime__MysteriousAffair = ['murder', 'poisoning']
