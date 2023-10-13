@@ -2,12 +2,13 @@ class OutputInterface:
 
     """ This file has interfaces for the analysis that we're doing on the crime novels. This will be used to create the output. """
 
-    def investigator_pair_first_occurrence(chapter: int=None, sentence: int=None) -> dict:
+    def investigator_pair_first_occurrence(name: str=None, chapter: int=None, sentence: int=None) -> dict:
 
         """ This has details about the first occurrence of the investigator (or pair). """
 
         return
         {
+            "name": name,
             "type": "investigator_pair_first_occurrence",
             "chapter": None,
             "sentence": None,
@@ -26,12 +27,13 @@ class OutputInterface:
             "details": details    
         }
 
-    def first_mention_of_perpetrator(chapter: int = None, sentence: int = None) -> dict:
+    def first_mention_of_perpetrator(name: str = None, chapter: int = None, sentence: int = None) -> dict:
 
         """ This has details about the first mention of the perpetrator. """
         
         return 
         {
+            "name": name,
             "type": "first_mention_of_perpetrator",
             "chapter": chapter,
             "sentence": sentence,
