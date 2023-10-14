@@ -7,6 +7,7 @@ import os
 import csv 
 from collections import Counter
 import identities
+from output_interface import OutputInterface
 
 
 # Murder of the links uses numeric chapter numbers with chapter names
@@ -233,7 +234,12 @@ class NovelProcessing:
 
             if(not self.SentencesText__MysteriousAffair):
                 for chapterNumber in range (0,len(novelChapters)):
-                    self.SentencesText__MysteriousAffair.append (re.split(pattern, novelChapters[chapterNumber]))
+                    novelChaptersAbbrevReplaced = re.sub(r'([aApP])\.([mM])\.', r'\1<tmp_prd>\2<tmp_prd>', novelChapters[chapterNumber])
+                    novelChaptersAbbrevReplaced = re.sub(r'(\W)(mr|mrs|ms|dr|st|m|prof|capt|cpt|lt|mme|mlle)\.', r'\1\2<tmp_prd>', novelChaptersAbbrevReplaced)
+                    chapterSentences = re.split(pattern, novelChaptersAbbrevReplaced)
+                    for i, sent in enumerate(chapterSentences):
+                        chapterSentences[i] = sent.replace('<tmp_prd>', '.')
+                    self.SentencesText__MysteriousAffair.append (chapterSentences)
 
             return self.SentencesText__MysteriousAffair
         
@@ -241,6 +247,11 @@ class NovelProcessing:
 
             if(not self.SentencesText__TheSignOfTheFour):
                 for chapterNumber in range (0,len(novelChapters)):
+                    novelChaptersAbbrevReplaced = re.sub(r'([aApP])\.([mM])\.', r'\1<tmp_prd>\2<tmp_prd>', novelChapters[chapterNumber])
+                    novelChaptersAbbrevReplaced = re.sub(r'(\W)(mr|mrs|ms|dr|st|m|prof|capt|cpt|lt|mme|mlle)\.', r'\1\2<tmp_prd>', novelChaptersAbbrevReplaced)
+                    chapterSentences = re.split(pattern, novelChaptersAbbrevReplaced)
+                    for i, sent in enumerate(chapterSentences):
+                        chapterSentences[i] = sent.replace('<tmp_prd>', '.')
                     self.SentencesText__TheSignOfTheFour.append (re.split(pattern, novelChapters[chapterNumber]))
 
             return self.SentencesText__TheSignOfTheFour
@@ -249,6 +260,11 @@ class NovelProcessing:
 
             if(not self.SentencesText__TheMurderOnTheLinks):
                 for chapterNumber in range (0,len(novelChapters)):
+                    novelChaptersAbbrevReplaced = re.sub(r'([aApP])\.([mM])\.', r'\1<tmp_prd>\2<tmp_prd>', novelChapters[chapterNumber])
+                    novelChaptersAbbrevReplaced = re.sub(r'(\W)(mr|mrs|ms|dr|st|m|prof|capt|cpt|lt|mme|mlle)\.', r'\1\2<tmp_prd>', novelChaptersAbbrevReplaced)
+                    chapterSentences = re.split(pattern, novelChaptersAbbrevReplaced)
+                    for i, sent in enumerate(chapterSentences):
+                        chapterSentences[i] = sent.replace('<tmp_prd>', '.')
                     self.SentencesText__TheMurderOnTheLinks.append (re.split(pattern, novelChapters[chapterNumber]))
 
             return self.SentencesText__TheMurderOnTheLinks
@@ -269,13 +285,77 @@ class NovelProcessing:
         elif(self.cur_novel_id == 2):
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__murderOnTheLinks, sentences)
         
-        return {
-            "type": "investigator_pair_first_occurrence",
-            "name": InvestigatorSentencesData[0][0],
-            "chapter": InvestigatorSentencesData[0][1],
-            "sentence": InvestigatorSentencesData[0][2],
-        }
+        # return {
+        #     "type": "investigator_pair_first_occurrence",
+        #     "name": InvestigatorSentencesData[0][0],
+        #     "chapter": InvestigatorSentencesData[0][1],
+        #     "sentence": InvestigatorSentencesData[0][2],
+        # }
+        return OutputInterface.investigator_pair_first_occurrence(InvestigatorSentencesData[0][0], InvestigatorSentencesData[0][1], InvestigatorSentencesData[0][2])
     
+    def answer2(self):
+        
+        # The Mysterious Affair At Styles
+            # Correct sentence for first mention of victim+death: Inglethorp cried out in a strangled voice, her eyes fixed on the doctor: “Alfred—Alfred——” Then she fell back motionless on the pillows
+            # Correct sentence for first mention of cause of death: I believe she has been poisoned! I’m certain Dr. Bauerstein suspects it
+            # Both in chapter 3
+
+        # The Sign of the Four
+            # Correct sentence for first mention of death: It means murder,” said he, stooping over the dead man [chapter 5]
+            # Correct sentence for first mention of cause of death: But be careful, for it is poisoned [chapter 5]
+            # Correct sentence for first mention of robbery: They have robbed him of the treasure [chapter 5]
+
+        # Murder On the Links
+            # Correct sentence for first mention of victim+death: Renauld was murdered this morning [very end of chapter 2]
+            # Correct sentence for first mention of cause of death: Going to call her mistress as usual, a younger maid, Léonie, was horrified to discover her gagged and bound, and almost at the same moment news was brought that M. Renauld’s body had been discovered, stone dead, stabbed in the back [chapter 3]
+        
+        sentences = self.getSentencesText()
+
+        if(self.cur_novel_id == 0):
+            victim = 'mrs. inglethorp'
+        elif(self.cur_novel_id == 1):
+            victim = 'bartholomew'
+        elif(self.cur_novel_id == 2):
+            victim = 'renauld'
+
+        pronouns = ['she', 'he', 'it']
+        verbs = ['was', 'is', 'ha[sd]\W*been', 'means']
+        murderWords = ['murder(ed)?', 'killed']
+        causeOfDeathWords = ['poisoned', 'stabbed']
+
+        allKillWords = murderWords + causeOfDeathWords
+
+        subjects = pronouns
+        subjects.append(victim)
+
+        for i, subject in enumerate(subjects):
+            subjects[i] = '(^|(?<=\W))' + subject + '(?=\W|$)'
+        for i, verb in enumerate(verbs):
+            verbs[i] = '(^|(?<=\W))' + verb + '(?=\W|$)'
+        for i, killWord in enumerate(allKillWords):
+            allKillWords[i] = '(^|(?<=\W))' + killWord + '(?=\W|$)'
+
+        pattern = '(' + '|'.join(subjects) + ').*(' + '|'.join(verbs) + ').*(' + '|'.join(allKillWords) + ')'
+
+        foundCrimeFirstSentence = False
+        crimeChapterNum = 0
+        crimeSentenceNum = 0
+        causeOfDeath = ''
+        for chapterNum, chapter in enumerate(sentences):
+            for sentenceNum, sentence in enumerate(chapter):
+                match = re.search(pattern, sentence)
+                if(match != None):
+                    for causeOfDeathWord in causeOfDeathWords:
+                        if(causeOfDeathWord in sentence):
+                            causeOfDeath = causeOfDeathWord
+                            break
+                    if(not foundCrimeFirstSentence):
+                        foundCrimeFirstSentence = True
+                        crimeChapterNum = 1 + chapterNum
+                        crimeSentenceNum = 1 + sentenceNum
+
+        return OutputInterface.first_mention_of_crime(crimeChapterNum, crimeSentenceNum, causeOfDeath, victim)  
+
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
     # When is the perpetrator first mentioned - chapter #, the sentence(s) # in a chapter
     def answer3(self):
@@ -287,12 +367,13 @@ class NovelProcessing:
             PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__SignOfTheFour, sentences)
         elif(self.cur_novel_id == 2):
             PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__murderOnTheLinks, sentences)
-        return {
-                "type": "first_mention_of_perpetrator",
-                "name": PerpetratorSentencesData[0][0],
-                "chapter": PerpetratorSentencesData[0][1],
-                "sentence": PerpetratorSentencesData[0][2],
-            }
+        # return {
+        #         "type": "first_mention_of_perpetrator",
+        #         "name": PerpetratorSentencesData[0][0],
+        #         "chapter": PerpetratorSentencesData[0][1],
+        #         "sentence": PerpetratorSentencesData[0][2],
+        #     }
+        return OutputInterface.first_mention_of_perpetrator(PerpetratorSentencesData[0][0], PerpetratorSentencesData[0][1], PerpetratorSentencesData[0][2])
     
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
@@ -462,8 +543,7 @@ class NovelProcessing:
         if(encounterSent is None):
             print("Sorry, it looks like the investigator and perpetrator didn't ever actually meet.")
         else:
-            print(encounterSent)
-            return {"chapter": chapterNum, "sentence": sentenceNum, "how": self.concatReTup(self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal))}
+            return OutputInterface.detective_perpetrator_cooccurrence(chapterNum, sentenceNum, self.concatReTup(self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal)))            
         #sentenceNum, chapterNum = sentenceNum + 1, chapterNum + 1
 
 
@@ -474,8 +554,7 @@ class NovelProcessing:
             return self.answer1()
 
         elif(questionId == 2):
-            #return self.answer2() #not yet implemented
-            pass
+            return self.answer2()
 
         elif(questionId == 3):
             return self.answer3()
@@ -498,10 +577,16 @@ if __name__ == "__main__":
         print(proc.SentencesText__MysteriousAffair[0][0])
 
     #case 5 testing
-    if(True):
+    if(False):
         proc = NovelProcessing()
         print (proc.answer1())
         print (proc.answer3())
         # print (proc.answer4(0))
         print(proc.answer5())
         print (proc.answer6())
+
+    #case 2 testing
+    if(True):
+        proc = NovelProcessing()
+        proc.cur_novel_id = 2
+        # print(proc.answer2())
