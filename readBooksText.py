@@ -270,6 +270,69 @@ class NovelProcessing:
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__murderOnTheLinks, sentences)
         return InvestigatorSentencesData[0]
     
+    def answer2(self):
+        
+        # The Mysterious Affair At Styles
+            # Correct sentence for first mention of victim+death: Inglethorp cried out in a strangled voice, her eyes fixed on the doctor: “Alfred—Alfred——” Then she fell back motionless on the pillows
+            # Correct sentence for first mention of cause of death: I believe she has been poisoned! I’m certain Dr. Bauerstein suspects it
+            # Both in chapter 3
+
+        # The Sign of the Four
+            # Correct sentence for first mention of death: It means murder,” said he, stooping over the dead man [chapter 5]
+            # Correct sentence for first mention of cause of death: But be careful, for it is poisoned [chapter 5]
+            # Correct sentence for first mention of robbery: They have robbed him of the treasure [chapter 5]
+
+        # Murder On the Links
+            # Correct sentence for first mention of victim+death: Renauld was murdered this morning [very end of chapter 2]
+            # Correct sentence for first mention of cause of death: Going to call her mistress as usual, a younger maid, Léonie, was horrified to discover her gagged and bound, and almost at the same moment news was brought that M. Renauld’s body had been discovered, stone dead, stabbed in the back [chapter 3]
+        
+        sentences = self.getSentencesText()
+
+        if(self.cur_novel_id == 0):
+            victim = 'mrs. inglethorp'
+        elif(self.cur_novel_id == 1):
+            victim = 'bartholomew'
+        elif(self.cur_novel_id == 2):
+            victim = 'renauld'
+
+        pronouns = ['she', 'he', 'it']
+        verbs = ['was', 'is', 'ha[sd]\W*been', 'means']
+        murderWords = ['murder(ed)?', 'killed']
+        causeOfDeathWords = ['poisoned', 'stabbed']
+
+        allKillWords = murderWords + causeOfDeathWords
+
+        subjects = pronouns
+        subjects.append(victim)
+
+        for i, subject in enumerate(subjects):
+            subjects[i] = '(^|(?<=\W))' + subject + '(?=\W|$)'
+        for i, verb in enumerate(verbs):
+            verbs[i] = '(^|(?<=\W))' + verb + '(?=\W|$)'
+        for i, killWord in enumerate(allKillWords):
+            allKillWords[i] = '(^|(?<=\W))' + killWord + '(?=\W|$)'
+
+        pattern = '(' + '|'.join(subjects) + ').*(' + '|'.join(verbs) + ').*(' + '|'.join(allKillWords) + ')'
+
+        foundCrimeFirstSentence = False
+        crimeChapterNum = 0
+        crimeSentenceNum = 0
+        causeOfDeath = ''
+        for chapterNum, chapter in enumerate(sentences):
+            for sentenceNum, sentence in enumerate(chapter):
+                match = re.search(pattern, sentence)
+                if(match != None):
+                    for causeOfDeathWord in causeOfDeathWords:
+                        if(causeOfDeathWord in sentence):
+                            causeOfDeath = causeOfDeathWord
+                            break
+                    if(not foundCrimeFirstSentence):
+                        foundCrimeFirstSentence = True
+                        crimeChapterNum = 1 + chapterNum
+                        crimeSentenceNum = 1 + sentenceNum
+                    
+        return {"chapter": crimeChapterNum, "sentence": crimeSentenceNum, "type_of_crime": causeOfDeath, "details": victim}
+
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
     # When is the perpetrator first mentioned - chapter #, the sentence(s) # in a chapter
     def answer3(self):
@@ -454,8 +517,7 @@ class NovelProcessing:
             return self.answer1()
 
         elif(questionId == 2):
-            #return self.answer2() #not yet implemented
-            pass
+            return self.answer2()
 
         elif(questionId == 3):
             return self.answer3()
@@ -478,10 +540,16 @@ if __name__ == "__main__":
         print(proc.SentencesText__MysteriousAffair[0][0])
 
     #case 5 testing
-    if(True):
+    if(False):
         proc = NovelProcessing()
         # print (proc.answer1(0))
         # print (proc.answer3(0))
         # print (proc.answer4(0))
         print(proc.answer5())
         print (proc.answer6())
+
+    #case 2 testing
+    if(True):
+        proc = NovelProcessing()
+        proc.cur_novel_id = 2
+        print(proc.answer2())
