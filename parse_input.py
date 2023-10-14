@@ -110,7 +110,7 @@ def extractPrompt(line, funcs=det_funcs):
     #catch possible intersecting queries
     global doubleQuery
     if(doubleQuery):
-        print("debugging message: double query case triggered, previous input ignored to handle for potential dual crime + criminal prompt")
+        #print("debugging message: double query case triggered, previous input ignored to handle for potential dual crime + criminal prompt")
         secQuery = doubleQuery
         doubleQuery = False
         return secQuery
@@ -134,7 +134,7 @@ def extractPrompt(line, funcs=det_funcs):
         return prompts["concurrence"] #mention of all 3 implies inquiry about meeting
     if(prompts["crime"] in promptList and prompts["perpetrator"] in promptList):
         doubleQuery = prompts["crime"] #both being true could imply either case, keeps API intact by signaling to data pipeline to show results for both queries
-        print("double prompt detection case, carriage return through the next input call")
+        #print("double prompt detection case, carriage return through the next input call")
         return prompts["perpetrator"]
     '''
     possible we want a more advanced decision tree, for cases such as referring to the criminal not by name but by the crime they committed
