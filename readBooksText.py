@@ -233,7 +233,12 @@ class NovelProcessing:
 
             if(not self.SentencesText__MysteriousAffair):
                 for chapterNumber in range (0,len(novelChapters)):
-                    self.SentencesText__MysteriousAffair.append (re.split(pattern, novelChapters[chapterNumber]))
+                    novelChaptersAbbrevReplaced = re.sub(r'([aApP])\.([mM])\.', r'\1<tmp_prd>\2<tmp_prd>', novelChapters[chapterNumber])
+                    novelChaptersAbbrevReplaced = re.sub(r'(\W)(mr|mrs|ms|dr|st|m|prof|capt|cpt|lt|mme|mlle)\.', r'\1\2<tmp_prd>', novelChaptersAbbrevReplaced)
+                    chapterSentences = re.split(pattern, novelChaptersAbbrevReplaced)
+                    for i, sent in enumerate(chapterSentences):
+                        chapterSentences[i] = sent.replace('<tmp_prd>', '.')
+                    self.SentencesText__MysteriousAffair.append (chapterSentences)
 
             return self.SentencesText__MysteriousAffair
         
@@ -241,6 +246,11 @@ class NovelProcessing:
 
             if(not self.SentencesText__TheSignOfTheFour):
                 for chapterNumber in range (0,len(novelChapters)):
+                    novelChaptersAbbrevReplaced = re.sub(r'([aApP])\.([mM])\.', r'\1<tmp_prd>\2<tmp_prd>', novelChapters[chapterNumber])
+                    novelChaptersAbbrevReplaced = re.sub(r'(\W)(mr|mrs|ms|dr|st|m|prof|capt|cpt|lt|mme|mlle)\.', r'\1\2<tmp_prd>', novelChaptersAbbrevReplaced)
+                    chapterSentences = re.split(pattern, novelChaptersAbbrevReplaced)
+                    for i, sent in enumerate(chapterSentences):
+                        chapterSentences[i] = sent.replace('<tmp_prd>', '.')
                     self.SentencesText__TheSignOfTheFour.append (re.split(pattern, novelChapters[chapterNumber]))
 
             return self.SentencesText__TheSignOfTheFour
@@ -249,6 +259,11 @@ class NovelProcessing:
 
             if(not self.SentencesText__TheMurderOnTheLinks):
                 for chapterNumber in range (0,len(novelChapters)):
+                    novelChaptersAbbrevReplaced = re.sub(r'([aApP])\.([mM])\.', r'\1<tmp_prd>\2<tmp_prd>', novelChapters[chapterNumber])
+                    novelChaptersAbbrevReplaced = re.sub(r'(\W)(mr|mrs|ms|dr|st|m|prof|capt|cpt|lt|mme|mlle)\.', r'\1\2<tmp_prd>', novelChaptersAbbrevReplaced)
+                    chapterSentences = re.split(pattern, novelChaptersAbbrevReplaced)
+                    for i, sent in enumerate(chapterSentences):
+                        chapterSentences[i] = sent.replace('<tmp_prd>', '.')
                     self.SentencesText__TheMurderOnTheLinks.append (re.split(pattern, novelChapters[chapterNumber]))
 
             return self.SentencesText__TheMurderOnTheLinks
@@ -552,4 +567,4 @@ if __name__ == "__main__":
     if(True):
         proc = NovelProcessing()
         proc.cur_novel_id = 2
-        print(proc.answer2())
+        # print(proc.answer2())
