@@ -7,6 +7,7 @@ import os
 import csv 
 from collections import Counter
 import identities
+from output_interface import OutputInterface
 
 
 # Murder of the links uses numeric chapter numbers with chapter names
@@ -283,7 +284,7 @@ class NovelProcessing:
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__SignOfTheFour, sentences)
         elif(self.cur_novel_id == 2):
             InvestigatorSentencesData = Identities__FindOccurencesInText(identities.Investigators__murderOnTheLinks, sentences)
-        return InvestigatorSentencesData[0]
+        return OutputInterface.investigator_pair_first_occurrence(InvestigatorSentencesData[0][0], InvestigatorSentencesData[0][1], InvestigatorSentencesData[0][2])
     
     def answer2(self):
         
@@ -345,8 +346,8 @@ class NovelProcessing:
                         foundCrimeFirstSentence = True
                         crimeChapterNum = 1 + chapterNum
                         crimeSentenceNum = 1 + sentenceNum
-                    
-        return {"chapter": crimeChapterNum, "sentence": crimeSentenceNum, "type_of_crime": causeOfDeath, "details": victim}
+
+        return OutputInterface.first_mention_of_crime(crimeChapterNum, crimeSentenceNum, causeOfDeath, victim)  
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
     # When is the perpetrator first mentioned - chapter #, the sentence(s) # in a chapter
@@ -359,7 +360,7 @@ class NovelProcessing:
             PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__SignOfTheFour, sentences)
         elif(self.cur_novel_id == 2):
             PerpetratorSentencesData = Identities__FindOccurencesInText(identities.Criminal__murderOnTheLinks, sentences)
-        return PerpetratorSentencesData[0]
+        return OutputInterface.first_mention_of_perpetrator(PerpetratorSentencesData[0][0], PerpetratorSentencesData[0][1], PerpetratorSentencesData[0][2])
     
 
     # For a given novel (0=MysteriousAffair, 1=SignOfFour, 2=MurderOnLinks), answer the question: 
@@ -520,8 +521,7 @@ class NovelProcessing:
         if(encounterSent is None):
             print("Sorry, it looks like the investigator and perpetrator didn't ever actually meet.")
         else:
-            print(encounterSent)
-            return {"chapter": chapterNum, "sentence": sentenceNum, "how": self.concatReTup(self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal))}
+            return OutputInterface.detective_perpetrator_cooccurrence(chapterNum, sentenceNum, self.concatReTup(self.popIdentities(self.getVerbs(encounterSent), Investigators, Criminal)))            
         #sentenceNum, chapterNum = sentenceNum + 1, chapterNum + 1
 
 
