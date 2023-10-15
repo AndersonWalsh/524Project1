@@ -52,6 +52,22 @@ class OutputProcessor:
         
         """ for the first introduction of other suspects """
         
-        response = random.choice(self.templates["other_suspects_first_introduction"])
-        return response.format(**data)
+         # Ensure that data is in the expected format
+        if isinstance(data, dict):
+            data = [data]
+        elif not data or not isinstance(data, list):
+            return "I couldn't find any information on other suspects."
+
+        suspect_introductions = []
+        for suspect_data in data:
+            formatted_suspect = f"{suspect_data['type']} in Chapter {suspect_data['chapter']}, Sentence {suspect_data['sentence']}"
+            suspect_introductions.append(formatted_suspect)
+
+        intro_text = ", ".join(suspect_introductions[:-1])
+        if len(suspect_introductions) > 1:
+            intro_text += f", and {suspect_introductions[-1]}"
+        else:
+            intro_text = suspect_introductions[0]
+
+        return f"The other suspects were first introduced as follows: {intro_text}."
 
