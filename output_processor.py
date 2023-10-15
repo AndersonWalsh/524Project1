@@ -15,11 +15,24 @@ class OutputProcessor:
 
         response = random.choice(self.templates["investigator_pair_first_occurrence"])
         return response.format(**data)
+    
+    def change_tense(self, verb: str) -> str:
+
+        """ We can add more verbs as required. """
+
+        crime_type_tense = {
+            "poisoned": "poisoning",
+            "stabbed": "stabbing",
+            "shot": "shooting"  
+        }
+        
+        return crime_type_tense.get(verb, verb)
 
     def process_first_mention_of_crime(self, data) -> str:
 
         """ for the first mention of the crime """
 
+        data["type_of_crime"] = self.change_tense(data["type_of_crime"])
         response = random.choice(self.templates["first_mention_of_crime"])
         return response.format(**data)
 
@@ -29,6 +42,7 @@ class OutputProcessor:
         
         response = random.choice(self.templates["first_mention_of_perpetrator"])
         return response.format(**data)
+
 
     def process_three_words_around_perpetrator(self, data_list) -> str:
         """ preceding and succeeding words around the perpetrator's mention """

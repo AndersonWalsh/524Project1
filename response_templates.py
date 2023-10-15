@@ -6,9 +6,9 @@ response_templates = {
     ],
 
     "first_mention_of_crime": [
-        "The crime, which is of type {type_of_crime}, is first mentioned in Chapter {chapter}, Sentence {sentence}. Here are some details about it: {details}.",
-        "In Chapter {chapter}, Sentence {sentence}, the crime is first mentioned. It's a {type_of_crime}. Here's more on that: {details}.",
-        "The {type_of_crime} is first discussed in Chapter {chapter}, Sentence {sentence}. Here are more details: {details}."
+        "The crime, which is of type {type_of_crime}, is first mentioned in Chapter {chapter}, Sentence {sentence}. The victim was {victim}.",
+        "In Chapter {chapter}, Sentence {sentence}, the crime is first mentioned. It's a {type_of_crime}. The victim in this case was {victim}.",
+        "The crime where {victim} was {type_of_crime} was first discussed in Chapter {chapter}, Sentence {sentence}."
     ],
 
     "first_mention_of_perpetrator": [

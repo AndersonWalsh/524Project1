@@ -11,7 +11,7 @@ class OutputInterface:
             "sentence": sentence,
         }
 
-    def first_mention_of_crime(chapter: int=None, sentence: int=None, type_of_crime: str=None, details: str = None) -> dict:
+    def first_mention_of_crime(chapter: int=None, sentence: int=None, type_of_crime: str=None, victim: str = None) -> dict:
 
         """ This has details about the first mention of the crime. """
 
@@ -19,7 +19,7 @@ class OutputInterface:
             "chapter": chapter,
             "sentence": sentence,
             "type_of_crime": type_of_crime,
-            "details": details    
+            "victim": victim    
         }
 
     def first_mention_of_perpetrator(name: str = None, chapter: int = None, sentence: int = None) -> dict:
