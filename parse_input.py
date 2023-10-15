@@ -168,7 +168,7 @@ def det_Mol(line):
 
 det_funcs_novel = [det_MysAff, det_Sof, det_Mol]
 
-switchRe = 'switch|change|move|go on|go for|shift|replace|turn'
+switchRe = 'switch|change|move|go on|go for|shift|replace|turn|transition'
 
 def det_Switch(line):
     return re.findall('switch|change|move|go on|go for|shift|replace|turn|transition', line)
