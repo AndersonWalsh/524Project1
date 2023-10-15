@@ -32,7 +32,17 @@ if __name__ == "__main__":
         elif promptNum == 3:
             print(outProc.process_first_mention_of_perpetrator(novelProc.extractAnswerToQuestion(promptNum)))
         elif promptNum == 4:
-            print(outProc.process_three_words_around_perpetrator(novelProc.extractAnswerToQuestion(promptNum)))
+            results = novelProc.extractAnswerToQuestion(promptNum)
+            formatted_results = [
+                {
+                    "three_preceding_words": res[0],
+                    "perpetrator": res[1],
+                    "three_following_words": res[2],
+                    "chapter": res[3],
+                    "sentence": res[4]
+                } for res in results
+            ]
+            print(outProc.process_three_words_around_perpetrator(formatted_results))
         elif promptNum == 5:
             print(outProc.process_detective_perpetrator_cooccurrence(novelProc.extractAnswerToQuestion(promptNum)))
         elif promptNum == 6:

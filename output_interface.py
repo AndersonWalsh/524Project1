@@ -32,13 +32,14 @@ class OutputInterface:
             "sentence": sentence,
         }
     
-    def three_words_around_perpetrator(chapter: int = None, sentence: int = None, three_preceding_words: list = None, three_following_words: list = None) -> dict:
+    def three_words_around_perpetrator(chapter: int = None, sentence: int = None, perpetrator: str = None, three_preceding_words: list = None, three_following_words: list = None) -> dict:
         
         """ This has details about the three words that re present before and after the perpetrator. """
 
         return {
             "chapter": chapter,
             "sentence": sentence,
+            "perpetrator": perpetrator,
             "three_preceding_words": three_preceding_words or [],
             "three_following_words": three_following_words or []
         }

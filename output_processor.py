@@ -30,12 +30,15 @@ class OutputProcessor:
         response = random.choice(self.templates["first_mention_of_perpetrator"])
         return response.format(**data)
 
-    def process_three_words_around_perpetrator(self, data) -> str:
-        
+    def process_three_words_around_perpetrator(self, data_list) -> str:
         """ preceding and succeeding words around the perpetrator's mention """
-        
-        response = random.choice(self.templates["three_words_around_perpetrator"])
-        return response.format(**data)
+        responses = []
+        for data in data_list:
+            response = random.choice(self.templates["three_words_around_perpetrator"])
+            formatted_response = response.format(**data)
+            responses.append(formatted_response)
+
+        return "\n".join(responses)
 
     def process_detective_perpetrator_cooccurrence(self, data) -> str:
 
