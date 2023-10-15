@@ -13,7 +13,9 @@ class OutputProcessor:
 
         """ first occurrence of the investigator or pair """
 
+        data["name"] = data["name"].title()  # For names
         response = random.choice(self.templates["investigator_pair_first_occurrence"])
+
         return response.format(**data)
     
     def change_tense(self, verb: str) -> str:
@@ -33,13 +35,16 @@ class OutputProcessor:
         """ for the first mention of the crime """
 
         data["type_of_crime"] = self.change_tense(data["type_of_crime"])
+        data["victim"] = data["victim"].title()  # For victims
         response = random.choice(self.templates["first_mention_of_crime"])
+        
         return response.format(**data)
 
     def process_first_mention_of_perpetrator(self, data) -> str:
         
         """ for the first mention of the perpetrator """
         
+        data["name"] = data["name"].title()  # For names
         response = random.choice(self.templates["first_mention_of_perpetrator"])
         return response.format(**data)
 
@@ -74,6 +79,10 @@ class OutputProcessor:
 
         suspect_intro = []
         for suspect_data in data:
+
+            # Capitalize the suspect's name
+            if "type" in suspect_data:
+                suspect_data["type"] = suspect_data["type"].title()
             formatted_suspect = f"{suspect_data['type']} in Chapter {suspect_data['chapter']}, Sentence {suspect_data['sentence']}"
             suspect_intro.append(formatted_suspect)
 
