@@ -174,6 +174,7 @@ def det_Switch(line):
     return re.findall('switch|change|move|go on|go for|shift|replace|turn|transition', line)
 
 def extractNovel(line, funcs=det_funcs_novel):
+    line = line.lower()
     novel = getPromptsList([], line, funcs)
 
     #reprompt if nothing detected
