@@ -5,6 +5,7 @@ class OutputInterface:
     def investigator_pair_first_occurrence(name: str=None, chapter: int=None, sentence: int=None) -> dict:
 
         """ This has details about the first occurrence of the investigator (or pair). """
+        
         return {
             "name": name,
             "chapter": chapter,

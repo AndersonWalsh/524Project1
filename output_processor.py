@@ -35,7 +35,7 @@ class OutputProcessor:
         """ for the first mention of the crime """
 
         data["type_of_crime"] = self.change_tense(data["type_of_crime"])
-        data["victim"] = data["victim"].title()  # For victims
+        data["victim"] = data["victim"].title()  # capitalize victim names
         response = random.choice(self.templates["first_mention_of_crime"])
         
         return response.format(**data)
@@ -44,14 +44,16 @@ class OutputProcessor:
         
         """ for the first mention of the perpetrator """
         
-        data["name"] = data["name"].title()  # For names
+        data["name"] = data["name"].title()  # capitalize perpetrator names
         response = random.choice(self.templates["first_mention_of_perpetrator"])
         return response.format(**data)
 
-
     def process_three_words_around_perpetrator(self, data_list) -> str:
+
         """ preceding and succeeding words around the perpetrator's mention """
+
         responses = []
+
         for data in data_list:
             response = random.choice(self.templates["three_words_around_perpetrator"])
             formatted_response = response.format(**data)
@@ -66,31 +68,45 @@ class OutputProcessor:
         data["how"] = ", ".join(data["how"])
         response = random.choice(self.templates["detective_perpetrator_cooccurrence"])
         return response.format(**data)
+    
+    def format_list(self, items: list) -> str:
+
+        """Format a list of items with natural language."""
+
+        if len(items) == 1:
+            return items[0]
+        elif len(items) == 2:
+            return " and ".join(items)
+        else:
+            return ", ".join(items[:-1]) + ", and " + items[-1]
 
     def process_other_suspects_first_introduction(self, data) -> str:
         
         """ for the first introduction of other suspects """
         
-         # Ensure that data is in the expected format
+        # trying to ensure that data is in the expected format
+
         if isinstance(data, dict):
             data = [data]
         elif not data or not isinstance(data, list):
             return "I couldn't find any information on other suspects."
 
         suspect_intro = []
+
         for suspect_data in data:
 
             # Capitalize the suspect's name
             if "type" in suspect_data:
                 suspect_data["type"] = suspect_data["type"].title()
+
             formatted_suspect = f"{suspect_data['type']} in Chapter {suspect_data['chapter']}, Sentence {suspect_data['sentence']}"
             suspect_intro.append(formatted_suspect)
 
         intro_text = ", ".join(suspect_intro[:-1])
+
         if len(suspect_intro) > 1:
             intro_text += f", and {suspect_intro[-1]}"
         else:
             intro_text = suspect_intro[0]
 
         return f"The other suspects were first introduced as follows: {intro_text}."
-
