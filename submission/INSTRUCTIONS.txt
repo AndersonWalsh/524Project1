@@ -1,0 +1,16 @@
+The chat bot has the following significant package dependencies for automatically retrieving novel texts via web requests (not used for any of the NLP processing/analysis):
+    1. Beautiful Soup 4 (bs4)
+    2. requests
+
+The chat bot code can be run with the following command:
+python3 main.py
+
+There are 3 different classifications of valid user input:
+    1. User input to choose/switch the novel that is currently being analyzed (use words such as "switch" or "change" before another novel title)
+    2. User input to ask one of the six available questions/prompts
+    3. User input to exit the program (simply type "exit")
+
+The first user input must be to select a book to analyze (cannot be a question/query/prompt).
+After the first user input, the user can choose to perform any of the actions listed above.
+
+Note that the text files for cleaned novel text content are automatically created when they do not yet exist.
