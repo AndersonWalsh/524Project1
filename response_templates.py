@@ -3,7 +3,7 @@ response_templates = {
     "investigator_pair_first_occurrence": [
         "The investigator {name} (or pair) first appears in Chapter {chapter} and Sentence {sentence}.",
         "In Chapter {chapter}, Sentence {sentence}, the investigator {name} (or pair) makes their first appearance.",
-        "We first find the investigator {name} (or paie) in Chapter {chapter}, Sentence {sentence}."
+        "We first find the investigator {name} (or pair) in Chapter {chapter}, Sentence {sentence}."
     ],
 
     "first_mention_of_crime": [
